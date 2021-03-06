@@ -11,6 +11,7 @@
 class Being {
 public:
     Being(int* life, int* strength, int* intelligence);
+    ~Being();
 
     int get_life();
     int get_strength();

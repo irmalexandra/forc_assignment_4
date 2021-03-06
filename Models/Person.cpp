@@ -7,6 +7,9 @@
 Person::Person(std::string* gender, int* fear, int* life, int* strength, int* intelligence): Being(life, strength, intelligence){
     this->gender = *gender;
     this->fear = *fear;
+
+    delete gender;
+    gender = nullptr;
 }
 
 std::string Person::get_gender() {
