@@ -4,7 +4,8 @@
 
 #include "EldritchHorror.h"
 
-EldritchHorror::EldritchHorror(const int* traumatism, int* life, int* strength, int* intelligence):Creature((new bool(true)), (new int(10)), life, strength, intelligence)  {
+EldritchHorror::EldritchHorror(const int* traumatism, int* life, int* strength, int* intelligence):
+Creature((new bool(true)), (new int(10)), life, strength, intelligence)  {
     this->traumatism = *traumatism;
 }
 

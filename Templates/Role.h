@@ -3,7 +3,7 @@
 //
 
 #ifndef FORC_PA_4_PERSON_H
-#define FORC_PA_4_PERSON_H
+#define FORC_PA_4_ROLE_H
 
 
 #include "Being.h"
@@ -11,12 +11,11 @@
 #include "iostream"
 
 
-class Person: public Being {
+class Role: public Being {
 public:
-    Person(std::string* gender, int* fear, int* life, int* strength, int* intelligence);
+    Role(int* fear, int* life_min, int* life_max,
+         int* strength_min, int* strength_max, int* intelligence_min, int* intelligence_max);
 
-    std::string get_gender();
-    void set_gender(std::string* gender);
 
     int get_fear();
     void set_fear(int* fear);
@@ -24,7 +23,6 @@ public:
     friend std::ostream& operator<< (std::ostream& out, Person* person);
 
 private:
-    std::string gender;
     int fear;
 };
 

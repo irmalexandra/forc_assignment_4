@@ -5,8 +5,8 @@
 #include "Investigator.h"
 
 
-Investigator::Investigator(int* terror, std::string* gender, int* fear, int* life, int* strength, int* intelligence)
-    : Person(gender, fear, life, strength, intelligence){
+Investigator::Investigator(int* terror, std::string* gender, int* fear, int* life, int* strength, int* intelligence):
+Person(gender, fear, life, strength, intelligence){
     this->terror = *terror;
 }
 

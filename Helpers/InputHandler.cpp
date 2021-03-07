@@ -37,12 +37,7 @@ void InputHandler::createIndividual() {
 
     bool create_process = true;
 
-    std::cout << "Select a character type" << std::endl;
-    std::cout << "1. Investigator" << std::endl;
-    std::cout << "2. Person (NPC)" << std::endl;
-    std::cout << "3. Creature" << std::endl;
-    std::cout << "4. Eldritch Horror" << std::endl;
-    std::cout << "5. Quit" << std::endl;
+    this->displayCharacterTypes();
 
     int choice = 0;
     while (create_process){
@@ -75,6 +70,19 @@ void InputHandler::createIndividual() {
                 break;
         }
     }
+}
+
+void InputHandler::createTemplate() {
+
+}
+
+void InputHandler::displayCharacterTypes() {
+    std::cout << "Select a character type" << std::endl;
+    std::cout << "1. Investigator" << std::endl;
+    std::cout << "2. Person (NPC)" << std::endl;
+    std::cout << "3. Creature" << std::endl;
+    std::cout << "4. Eldritch Horror" << std::endl;
+    std::cout << "5. Quit" << std::endl;
 }
 
 

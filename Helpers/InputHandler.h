@@ -25,6 +25,8 @@ public:
     DataHandler<EldritchHorror>* DHEldritchHorrors;
 
     void createIndividual();
+    void createTemplate();
+    static void displayCharacterTypes();
     void saveCharacter();
     void loadCharacter();
 

@@ -23,8 +23,6 @@ int Being::get_strength() {
     return this->strength;
 }
 
-
-
 void Being::set_life(int* life) {
     this->life = *life;
 }
