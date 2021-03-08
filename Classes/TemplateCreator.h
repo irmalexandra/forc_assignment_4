@@ -1,7 +1,9 @@
 #ifndef FORC_PA_4_TEMPLATECREATOR_H
 #define FORC_PA_4_TEMPLATECREATOR_H
 
+#include <sstream>
 #include "iostream"
+#include "istream"
 #include "../Templates/Role.h"
 #include "../Templates/Species.h"
 
@@ -12,14 +14,13 @@ public:
     TemplateCreator();
     ~TemplateCreator();
 
-    Role* createRole();
-    Species* createSpecies();
+    Role* create_role();
+    Species* create_species();
 
 private:
-    std::string* gender_picker();
-    void base_stat_setter();
-
-    const int base_stat_count = 3;
+    void get_base_stats(baseStats* base_stats = nullptr);
+    speciesStats* get_species_stats();
+    int get_int_within_range(int lower, int upper, const string& display_string);
 };
 
 

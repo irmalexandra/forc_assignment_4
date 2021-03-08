@@ -1,7 +1,3 @@
-//
-// Created by emmik on 05/03/2021.
-//
-
 #ifndef FORC_PA_4_BaseTemplate_H
 #define FORC_PA_4_BaseTemplate_H
 
@@ -10,8 +6,10 @@
 
 class BaseTemplate {
 public:
-    BaseTemplate(int* life_min, int* life_max, int* strength_min, int* strength_max, int* intelligence_min, int* intelligence_max);
-    ~BaseTemplate();
+    BaseTemplate(baseStats* baseStats);
+//    ~BaseTemplate();
+
+    std::string get_name();
 
     int get_life_range();
     int get_strength_range();

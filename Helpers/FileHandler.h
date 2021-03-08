@@ -1,16 +1,29 @@
 #ifndef FORC_PA_4_FILEHANDLER_H
 #define FORC_PA_4_FILEHANDLER_H
 #include <random>
-#include "iostream"
+#include <vector>
+#include <string>
+#include <fstream>
+#include <cstring>
+#include <iostream>
 
+#include "InputHandler.h"
 
+#include "../Templates/BaseTemplate.h"
+#include "../Templates/Role.h"
+#include "../Templates/Species.h"
+
+#include "../Helpers/HelperFunctions.h"
+
+using namespace std;
 
 class FileHandler {
 public:
     template<typename T> void write_to_file(T object, std::ostream out){
         out << object;
     };
-    static void read_from_file();
+    void make_templates_list(string file_to_read, InputHandler input_handler);
+
 };
 
 

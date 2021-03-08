@@ -1,12 +1,9 @@
-//
-// Created by emmik on 05/03/2021.
-//
 
-#ifndef FORC_PA_4_PERSON_H
+#ifndef FORC_PA_4_ROLE_H
 #define FORC_PA_4_ROLE_H
 
 
-#include "Being.h"
+#include "BaseTemplate.h"
 #include "string"
 #include "iostream"
 

@@ -1,7 +1,3 @@
-//
-// Created by emmik on 05/03/2021.
-//
-
 #include "Being.h"
 #include "iostream"
 

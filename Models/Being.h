@@ -1,7 +1,3 @@
-//
-// Created by emmik on 05/03/2021.
-//
-
 #ifndef FORC_PA_4_BEING_H
 #define FORC_PA_4_BEING_H
 
@@ -11,7 +7,7 @@
 class Being {
 public:
     Being(int* life, int* strength, int* intelligence);
-    ~Being();
+//    ~Being();
 
     int get_life();
     int get_strength();

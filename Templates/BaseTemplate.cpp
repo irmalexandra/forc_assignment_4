@@ -1,13 +1,15 @@
 #include "BaseTemplate.h"
 #include "iostream"
 
-BaseTemplate::BaseTemplate(int* life_min, int* life_max, int* strength_min, int* strength_max, int* intelligence_min, int* intelligence_max){
-    this->life_min = *life_min;
-    this->life_max = *life_max;
-    this->intelligence_min = *intelligence_min;
-    this->intelligence_max = *intelligence_max;
-    this->strength_min = *strength_min;
-    this->strength_max = *strength_max;
+BaseTemplate::BaseTemplate(baseStats* base_stats){
+    this->name = base_stats->name;
+
+    this->life_min = base_stats->life_min;
+    this->life_max = base_stats->life_max;
+    this->intelligence_min = base_stats->int_min;
+    this->intelligence_max = base_stats->int_max;
+    this->strength_min = base_stats->str_min;
+    this->strength_max = base_stats->str_max;
 }
 
 int BaseTemplate::get_life_range() {

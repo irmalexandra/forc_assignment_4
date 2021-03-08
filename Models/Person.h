@@ -1,7 +1,3 @@
-//
-// Created by emmik on 05/03/2021.
-//
-
 #ifndef FORC_PA_4_PERSON_H
 #define FORC_PA_4_PERSON_H
 

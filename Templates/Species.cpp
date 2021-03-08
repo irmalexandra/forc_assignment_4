@@ -13,8 +13,16 @@ bool Species::get_unnatural() {
     return this->unnatural;
 }
 
-int Species::get_disquiet_range() {
-    return this->disquiet_max - this->disquiet_min;
+Range Species::get_disquiet_range() {
+    return Range(this->disquiet_min, this->disquiet_max);
+}
+
+Range Species::get_traumatism_range(){
+    return Range(this->traumatism_min, this->traumatism_max);
+}
+
+bool Species::get_is_eldritch() {
+    return this->is_eldritch_horror;
 }
 
 void Species::set_unnatural(bool* unnatural) {
@@ -25,6 +33,11 @@ void Species::set_disquiet_range(int* disquiet_min, int* disquiet_max) {
     this->disquiet_min = *disquiet_min;
     this->disquiet_max = *disquiet_max;
 
+}
+
+void Species::set_traumatism_range(int* traumatism_min, int* traumatism_max){
+    this->traumatism_min = *traumatism_min;
+    this->traumatism_max = *traumatism_max;
 }
 
 std::ostream& operator<< (std::ostream& out, Species* Species){

@@ -2,13 +2,18 @@
 #define FORC_PA_4_INPUTHANDLER_H
 #include "vector"
 #include "iostream"
+#include "fstream"
 
 #include "../Models/Investigator.h"
 #include "../Models/Person.h"
 #include "../Models/Creature.h"
 #include "../Models/EldritchHorror.h"
 #include "../Classes/IndividualCreator.h"
+#include "../Classes/TemplateCreator.h"
 #include "DataHandler.h"
+#include "../Templates/Role.h"
+#include "../Templates/Species.h"
+
 
 using namespace std;
 class InputHandler {
@@ -19,7 +24,7 @@ public:
 
     IndividualCreator* individual_creator;
 
-    DataHandler<Investigator>* DHInvestigator;
+    DataHandler<Investigator>* DHInvestigators;
     DataHandler<Person>* DHPersons;
     DataHandler<Creature>* DHCreatures;
     DataHandler<EldritchHorror>* DHEldritchHorrors;

@@ -1,7 +1,3 @@
-//
-// Created by emmik on 05/03/2021.
-//
-
 #include "Role.h"
 
 Role::Role(int* fear, int* life_min, int* life_max,
@@ -10,17 +6,8 @@ Role::Role(int* fear, int* life_min, int* life_max,
     this->fear = *fear;
 }
 
-int Role::get_fear() {
-    return this->fear;
-}
-
-void Role::set_fear(int *fear) {
-    this->fear = *fear;
-}
-
 std::ostream& operator<< (std::ostream& out, Role* Role) {
-    out << (Being*)(Role);
-    out << "Fear: " << Role->get_fear() << std::endl;
+    out << (BaseTemplate*)(Role);
     return out;
 }
 

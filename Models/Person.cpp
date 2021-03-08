@@ -1,7 +1,3 @@
-//
-// Created by emmik on 05/03/2021.
-//
-
 #include "Person.h"
 
 Person::Person(std::string* gender, int* fear, int* life, int* strength, int* intelligence): Being(life, strength, intelligence){
