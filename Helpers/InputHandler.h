@@ -23,6 +23,7 @@ public:
     ~InputHandler();
 
     IndividualCreator* individual_creator;
+    TemplateCreator* template_creator;
 
     DataHandler<Investigator>* DHInvestigators;
     DataHandler<Person>* DHPersons;

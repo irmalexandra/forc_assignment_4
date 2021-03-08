@@ -13,10 +13,28 @@
 template<typename T>
 class DataHandler {
 public:
-    DataHandler();
-    ~DataHandler();
-    std::vector<T*>* get_data();
-    void display_data();
+    DataHandler(){
+        this->data = new std::vector<T*>;
+    };
+    ~DataHandler(){
+        if (this->data != nullptr){
+            this->data->erase(this->data->begin(), this->data->end());
+            delete this->data;
+            this->data = nullptr;
+        }
+
+    };
+    std::vector<T*>* get_data(){
+        return this->data;
+    };
+
+    friend std::ostream& operator<< (std::ostream& out, DataHandler<T>* data_handler){
+        for (auto const item : *(data_handler->data)){
+            out << item << std::endl;
+        }
+        return out;
+    };
+
 private:
     std::vector<T*>* data;
 };

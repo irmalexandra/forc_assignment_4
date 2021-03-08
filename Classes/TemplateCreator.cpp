@@ -47,28 +47,26 @@ Role *TemplateCreator::create_role() {
     return new Role(role_stats);
 }
 
-void TemplateCreator::base_stat_setter() {
-    int life_min;
-    int strength_min;
-    int intelligence_min;
-    int life_max;
-    int strength_max;
-    int intelligence_max;
 
-    cout << "Enter lower range for life";
-    cin >> life_min;
-    cout << "Enter upper range for life";
-    cin >> life_max;
 
-    cout << "Enter lower range for strength";
-    cin >> strength_min;
-    cout << "Enter upper range for strength";
-    cin >> strength_max;
 
-    cout << "Enter lower range for intelligence";
-    cin >> intelligence_min;
-    cout << "Enter upper range for intelligence";
-    cin >> intelligence_max;
+void TemplateCreator::get_base_stats(baseStats* base_stats) {
+    if (base_stats == nullptr){
+       auto base_stats = new baseStats();
+    }
+    int input;
+
+    cout << "Enter name (no spaces): ";
+    cin >> base_stats->name;
+
+    base_stats->life_min = get_int_within_range(0, 10, "Enter lower range for life: ");
+    base_stats->life_max = get_int_within_range(base_stats->life_min, 10, "Enter upper range for life: ");
+
+    base_stats->int_min = get_int_within_range(0, 10, "Enter lower range for intelligence: ");
+    base_stats->int_max = get_int_within_range(base_stats->int_min, 10, "Enter upper range for intelligence: ");
+
+    base_stats->str_min= get_int_within_range(0, 10, "Enter lower range for strength: ");
+    base_stats->str_max = get_int_within_range(base_stats->str_min, 10, "Enter upper range for strength: ");
 
 }
 

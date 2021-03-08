@@ -19,6 +19,7 @@ using namespace std;
 
 class FileHandler {
 public:
+public:
     template<typename T> void write_to_file(T object, std::ostream out){
         out << object;
     };

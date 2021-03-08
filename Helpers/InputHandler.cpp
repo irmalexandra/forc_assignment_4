@@ -1,32 +1,51 @@
 #include "InputHandler.h"
 
 bool create_another_character(){
-    std::cout << "Create another character? (y/s)" << std::endl;
+    cout << "Create another? (y/n)" << endl;
     char choice = 'y';
     cin >> choice;
     return choice == 'y';
 }
 
+void InputHandler::auto_save(){
+    string filename = "../Resources/data.txt";
+    ofstream fileout(filename, ios::trunc);
+
+    fileout << this->DHSpecies->get_data()->size() << endl;
+    fileout << this->DHSpecies;
+    fileout << "***" << endl;
+    fileout << this->DHRoles->get_data()->size() << endl;
+    fileout << this->DHRoles;
+}
+
 InputHandler::InputHandler() {
     this->individual_creator = new IndividualCreator();
-    this->DHInvestigator = new DataHandler<Investigator>;
-    this->DHPersons= new DataHandler<Person>;
+    this->template_creator = new TemplateCreator();
+    this->DHInvestigators = new DataHandler<Investigator>;
+    this->DHPersons = new DataHandler<Person>;
     this->DHCreatures = new DataHandler<Creature>;
     this->DHEldritchHorrors = new DataHandler<EldritchHorror>;
+    this->DHSpecies = new DataHandler<Species>;
+    this->DHRoles = new DataHandler<Role>;
+
 }
 
 InputHandler::~InputHandler() {
     delete this->individual_creator;
-    delete this->DHInvestigator;
+    delete this->DHInvestigators;
     delete this->DHCreatures;
     delete this->DHEldritchHorrors;
     delete this->DHPersons;
+    delete this->DHSpecies;
+    delete this->DHRoles;
 
     this->individual_creator = nullptr;
-    this->DHInvestigator = nullptr;
+    this->DHInvestigators = nullptr;
     this->DHPersons = nullptr;
     this->DHCreatures = nullptr;
     this->DHEldritchHorrors = nullptr;
+    this->DHSpecies = nullptr;
+    this->DHRoles = nullptr;
 }
 
 void InputHandler::create_individual() {
@@ -46,7 +65,7 @@ void InputHandler::create_individual() {
         switch (choice) {
             case 1:
                 investigator = this->individual_creator->createInvestigator();
-                this->DHInvestigator->get_data()->push_back(investigator);
+                this->DHInvestigators->get_data()->push_back(investigator);
                 create_process = create_another_character();
                 break;
             case 2:

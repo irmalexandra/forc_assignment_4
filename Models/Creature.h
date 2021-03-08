@@ -1,5 +1,5 @@
 #ifndef FORC_PA_4_CREATURE_H
-#define FORC_PA_4_SPECIES_H
+#define FORC_PA_4_CREATURE_H
 
 #include "Being.h"
 #include "iostream"

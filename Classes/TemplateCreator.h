@@ -6,13 +6,15 @@
 #include "istream"
 #include "../Templates/Role.h"
 #include "../Templates/Species.h"
+#include "../Templates/BaseTemplate.h"
+
 
 using namespace std;
 
 class TemplateCreator {
 public:
-    TemplateCreator();
-    ~TemplateCreator();
+    TemplateCreator() = default;
+    ~TemplateCreator() = default;
 
     Role* create_role();
     Species* create_species();
