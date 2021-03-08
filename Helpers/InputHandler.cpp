@@ -3,7 +3,7 @@
 bool create_another_character(){
     std::cout << "Create another character? (y/s)" << std::endl;
     char choice = 'y';
-    std::cin >> choice;
+    cin >> choice;
     return choice == 'y';
 }
 
@@ -19,7 +19,7 @@ InputHandler::~InputHandler() {
     delete this->individual_creator;
     delete this->DHInvestigator;
     delete this->DHCreatures;
-    delete this->DHCreatures;
+    delete this->DHEldritchHorrors;
     delete this->DHPersons;
 
     this->individual_creator = nullptr;
@@ -29,7 +29,7 @@ InputHandler::~InputHandler() {
     this->DHEldritchHorrors = nullptr;
 }
 
-void InputHandler::createIndividual() {
+void InputHandler::create_individual() {
     Investigator* investigator;
     Person* person;
     Creature* creature;
@@ -37,10 +37,11 @@ void InputHandler::createIndividual() {
 
     bool create_process = true;
 
-    this->displayCharacterTypes();
+
 
     int choice = 0;
     while (create_process){
+        this->displayCharacterTypes();
         std::cin >> choice;
         switch (choice) {
             case 1:
@@ -72,7 +73,38 @@ void InputHandler::createIndividual() {
     }
 }
 
-void InputHandler::createTemplate() {
+void InputHandler::create_template() {
+    int choice = 0;
+    bool create_process = true;
+
+    Species* species;
+    Role* role;
+
+
+    while(create_process){
+        std::cout << "Select:" << std::endl;
+        std::cout << "1. Species" << std::endl;
+        std::cout << "2. Role" << std::endl;
+       cin >> choice;
+       switch (choice) {
+           case 1:
+               species = this->template_creator->create_species();
+               this->DHSpecies->get_data()->push_back(species);
+               break;
+           case 2:
+               role = this->template_creator->create_role();
+               this->DHRoles->get_data()->push_back(role);
+               break;
+           default:
+               cout << "Invalid selection: " << choice << endl;
+               break;
+
+       }
+        this->auto_save();
+        create_process = create_another_character();
+    }
+
+
 
 }
 
@@ -83,7 +115,171 @@ void InputHandler::displayCharacterTypes() {
     std::cout << "3. Creature" << std::endl;
     std::cout << "4. Eldritch Horror" << std::endl;
     std::cout << "5. Quit" << std::endl;
+    int choice;
+
+    while(true){
+        cin >> choice;
+        switch(choice){
+            case 1:
+                cout << this->DHInvestigators << endl;
+                break;
+            case 2:
+                cout << this->DHPersons << endl;
+                break;
+            case 3:
+                cout << this->DHCreatures << endl;
+                break;
+            case 4:
+                cout << this->DHEldritchHorrors << endl;
+                break;
+            case 5:
+                return;
+            default:
+                cout<<"Error"<<endl;
+        }
+    }
+
+
 }
+
+void InputHandler::main_menu() {
+    int choice;
+    while(true){
+        cout << "1. Templates\n2. Individuals\n3. quit" << endl;
+        cin >> choice;
+        switch (choice) {
+            case(1):
+                this->template_menu();
+                break;
+            case(2):
+                this->individual_menu();
+                break;
+            case(3):
+                return;
+            default:
+                cout << choice << " is not an option" << endl;
+        }
+    }
+
+
+}
+
+void InputHandler::template_menu() {
+    int choice;
+    while(true){
+        cout << "1. View templates\n2. Edit templates\n3. Back" << endl;
+        cin >> choice;
+        switch (choice) {
+            case(1):
+                this->view_templates();
+                break;
+            case(2):
+                this->edit_templates();
+                break;
+            case(3):
+                return;
+            default:
+                cout << choice << " is not an option" << endl;
+        }
+    }
+}
+
+void InputHandler::individual_menu() {
+    int choice;
+    cout << "1. View individuals\n2. Create individual\n3. Back" << endl;
+
+    while(true){
+        cin >> choice;
+        switch (choice) {
+            case(1):
+                this->view_individuals();
+                break;
+            case(2):
+                this->create_individual();
+                break;
+            case(3):
+                return;
+            default:
+                cout << choice << " is not an option" << endl;
+        }
+    }
+}
+
+void InputHandler::view_templates() {
+    cout << "Available Roles" << endl;
+    cout << DHRoles << endl;
+    cout << "\nAvailable Species" << endl;
+    cout << DHSpecies << endl;
+
+}
+
+void InputHandler::edit_templates() {
+    int choice;
+    while(true){
+        cout << "1. Create templates\n2. Delete template\n3. Back" << endl;
+        cin >> choice;
+        switch (choice) {
+            case(1):
+                this->create_template();
+                break;
+            case(2):
+                this->delete_template();
+                break;
+            case(3):
+                return;
+            default:
+                cout << choice << " is not an option" << endl;
+        }
+    }
+}
+
+
+void InputHandler::view_individuals() {
+    int choice;
+    while(true){
+        cout << "1. View all individuals\n2. View investigators\n3. Back" << endl;
+        cin >> choice;
+        switch (choice) {
+            case(1):
+                this->view_all_individuals();
+                break;
+            case(2):
+                this->view_investigators();
+                this->auto_save();
+                break;
+            case(3):
+                return;
+            default:
+                cout << choice << " is not an option" << endl;
+        }
+    }
+}
+
+void InputHandler::view_all_individuals() {
+    cout << "Created individuals\n" << endl;
+    cout << "Investigators:" << endl;
+    cout << this->DHInvestigators << endl;
+    cout << "\nNPCs:" << endl;
+    cout << this->DHPersons << endl;
+    cout << "\nCreatures:" << endl;
+    cout << this->DHCreatures << endl;
+    cout << "\nEldritch Horrors" << endl;
+    cout << this->DHEldritchHorrors << endl;
+
+}
+
+void InputHandler::view_investigators() {
+    // print only investigators
+}
+
+void InputHandler::delete_template() {
+
+}
+
+
+
+
+
 
 
 

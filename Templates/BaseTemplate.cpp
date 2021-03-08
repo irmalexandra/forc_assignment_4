@@ -38,9 +38,11 @@ void BaseTemplate::set_strength_range(int* strength_min, int* strength_max) {
 }
 
 std::ostream& operator<< (std::ostream& out, BaseTemplate* BaseTemplate) {
-    out << "Life: " << BaseTemplate->get_life() << std::endl;
-    out << "Strength: " << BaseTemplate->get_strength() << std::endl;
-    out << "Intelligence: " << BaseTemplate->get_intelligence() << std::endl;
+    out << "Name: " << BaseTemplate->get_name() << std::endl;
+    out << "Life: " << BaseTemplate->get_life_range() << std::endl;
+    out << "Strength: " << BaseTemplate->get_strength_range() << std::endl;
+    out << "Intelligence: " << BaseTemplate->get_intelligence_range() << std::endl;
     return out;
 }
+
 

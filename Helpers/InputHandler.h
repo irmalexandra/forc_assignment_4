@@ -10,7 +10,7 @@
 #include "../Classes/IndividualCreator.h"
 #include "DataHandler.h"
 
-
+using namespace std;
 class InputHandler {
 
 public:
@@ -23,12 +23,25 @@ public:
     DataHandler<Person>* DHPersons;
     DataHandler<Creature>* DHCreatures;
     DataHandler<EldritchHorror>* DHEldritchHorrors;
+    DataHandler<Species>* DHSpecies;
+    DataHandler<Role>* DHRoles;
 
-    void createIndividual();
-    void createTemplate();
-    static void displayCharacterTypes();
-    void saveCharacter();
-    void loadCharacter();
+    void displayCharacterTypes();
+    void main_menu();
+    void auto_save();
+
+private:
+    void individual_menu();
+    void create_individual();
+    void view_individuals();
+    void view_all_individuals();
+    void view_investigators();
+
+    void template_menu();
+    void create_template();
+    void view_templates();
+    void edit_templates();
+    void delete_template();
 
 };
 

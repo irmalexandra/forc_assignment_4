@@ -14,23 +14,16 @@
 
 using namespace std;
 int main() {
+    auto input_handler = InputHandler();
+
+    auto file_handler = FileHandler();
+
+    file_handler.make_templates_list("../Resources/data.txt", input_handler);
+
+    input_handler.main_menu();
+
     srand(std::chrono::system_clock::to_time_t(std::chrono::system_clock::now()));
-    int* choice = new int;
 
-    cout << "1. Templates\n2. Individuals\3. quit" << endl;
-    cin >> *choice;
-    switch (*choice) {
-        case(1):
-
-            break;
-        case(2):
-            break;
-        case(3):
-            return 0;
-        default:
-            cout << "no" << endl;
-
-    }
 
 
 //    std::cout << "Hello, World!" << std::endl;
@@ -61,7 +54,7 @@ int main() {
 //
 //
 //    auto input_handler = new InputHandler();
-//    input_handler->createIndividual();
+//    input_handler->create_individual();
 //    input_handler->data_handler->display_data();
 
     return 0;

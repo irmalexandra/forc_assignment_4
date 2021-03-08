@@ -6,6 +6,9 @@
 #include "../Models/Creature.h"
 #include "../Models/EldritchHorror.h"
 
+#include "../Templates/Role.h"
+#include "../Templates/Species.h"
+
 
 template<typename T>
 class DataHandler {
