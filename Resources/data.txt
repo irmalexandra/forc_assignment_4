@@ -17,7 +17,6 @@ Life: 4-6
 Strength: 1-5
 Intelligence: 8-10
 
-***
 4
 Name: Wolf
 Creature

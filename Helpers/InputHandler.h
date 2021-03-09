@@ -10,6 +10,7 @@
 #include "../Models/EldritchHorror.h"
 #include "../Classes/IndividualCreator.h"
 #include "../Classes/TemplateCreator.h"
+
 #include "DataHandler.h"
 #include "../Templates/Role.h"
 #include "../Templates/Species.h"
@@ -35,8 +36,10 @@ public:
     void displayCharacterTypes();
     void main_menu();
     void auto_save();
+    void ready_dh_handler();
 
 private:
+
     void individual_menu();
     void create_individual();
     void view_individuals();

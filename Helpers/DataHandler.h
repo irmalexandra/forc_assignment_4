@@ -15,6 +15,7 @@ class DataHandler {
 public:
     DataHandler(){
         this->data = new std::vector<T*>;
+        f();
     };
     ~DataHandler(){
         if (this->data != nullptr){
@@ -24,6 +25,9 @@ public:
         }
 
     };
+    void f(){
+
+    }
     std::vector<T*>* get_data(){
         return this->data;
     };
@@ -37,6 +41,7 @@ public:
 
 private:
     std::vector<T*>* data;
+
 };
 
 

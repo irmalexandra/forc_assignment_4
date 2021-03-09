@@ -7,17 +7,6 @@ bool create_another_character(){
     return choice == 'y';
 }
 
-void InputHandler::auto_save(){
-    string filename = "../Resources/data.txt";
-    ofstream fileout(filename, ios::trunc);
-
-    fileout << this->DHSpecies->get_data()->size() << endl;
-    fileout << this->DHSpecies;
-    fileout << "***" << endl;
-    fileout << this->DHRoles->get_data()->size() << endl;
-    fileout << this->DHRoles;
-}
-
 InputHandler::InputHandler() {
     this->individual_creator = new IndividualCreator();
     this->template_creator = new TemplateCreator();
@@ -27,7 +16,7 @@ InputHandler::InputHandler() {
     this->DHEldritchHorrors = new DataHandler<EldritchHorror>;
     this->DHSpecies = new DataHandler<Species>;
     this->DHRoles = new DataHandler<Role>;
-
+    this->DHRoles->f();
 }
 
 InputHandler::~InputHandler() {
@@ -46,6 +35,17 @@ InputHandler::~InputHandler() {
     this->DHEldritchHorrors = nullptr;
     this->DHSpecies = nullptr;
     this->DHRoles = nullptr;
+}
+
+void InputHandler::auto_save(){
+    string filename = "../Resources/data.txt";
+    ofstream fileout(filename, ios::trunc);
+
+    fileout << this->DHSpecies->get_data()->size() << endl;
+    fileout << this->DHSpecies;
+    fileout << "***" << endl;
+    fileout << this->DHRoles->get_data()->size() << endl;
+    fileout << this->DHRoles;
 }
 
 void InputHandler::create_individual() {
@@ -293,6 +293,10 @@ void InputHandler::view_investigators() {
 
 void InputHandler::delete_template() {
 
+}
+
+void InputHandler::ready_dh_handler() {
+    this->DHRoles->f();
 }
 
 

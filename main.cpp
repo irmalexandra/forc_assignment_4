@@ -10,18 +10,27 @@
 #include "string"
 #include "Helpers/InputHandler.h"
 #include "Helpers/FileHandler.h"
-
+//#include "Helpers/HelperFunctions.h"
 
 
 using namespace std;
 int main() {
-    auto input_handler = InputHandler();
+    auto file_handler = new FileHandler();
+    auto input_handler = new InputHandler();
+    auto input2 = new InputHandler();
+    auto input3 = new InputHandler();
+//    input_handler->DHRoles->get_data();
+//    file_handler->temp_shit(input2);
+//    input2->DHRoles->get_data()->push_back(file_handler->temp_shit());
+//    input3->DHRoles->get_data()->push_back(file_handler->temp_shit2());
+//    input2->DHSpecies->get_data();
+//    input_handler->DHRoles->get_data();
+//    input_handler->DHRoles->f();
+//    input_handler->ready_dh_handler();
+//    ready_datahandler(input_handler);
+    file_handler->load_data("../Resources/data.txt", input_handler);
 
-    auto file_handler = FileHandler();
-
-    file_handler.make_templates_list("../Resources/data.txt", input_handler);
-
-    input_handler.main_menu();
+    input_handler->main_menu();
 
     srand(std::chrono::system_clock::to_time_t(std::chrono::system_clock::now()));
 

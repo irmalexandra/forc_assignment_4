@@ -1,13 +1,10 @@
 #include "FileHandler.h"
 
-void make_templates_list(string file_to_read, InputHandler input_handler){
+void FileHandler::load_data(string file_to_read, InputHandler* input_handler){
     char single_line[32] = {};
-    bool reading_role_line = false;
-    bool reading_species_line = false;
-    bool reset_single_template = true;
     auto thing = new vector<BaseTemplate>;
 
-    auto stats = new speciesStats();
+    speciesStats* stats;
 
     string name;
     string type;
@@ -28,10 +25,11 @@ void make_templates_list(string file_to_read, InputHandler input_handler){
         line_str = string(single_line);
         amount = stoi(line_str);
         for(int i = 0; i < amount; i++){
-
+            stats = new speciesStats();
             fileIn.getline(single_line, 32);
             line_str = string(single_line);
             name = split_string(line_str)->at(1);
+            stats->name = name;
 
             fileIn.getline(single_line, 32);
             line_str = string(single_line);
@@ -75,15 +73,17 @@ void make_templates_list(string file_to_read, InputHandler input_handler){
                     temp_string_array = split_string(split_string(line_str)->at(1), '-');
                     stats->trauma_min = stoi(temp_string_array->at(0));
                     stats->trauma_max = stoi(temp_string_array->at(1));
+                    stats->is_eldritch = true;
                 }
             }
 
             if (type == "Person"){
-                input_handler.DHRoles->get_data()->push_back(new Role((baseStats*) stats));
-            } else if (type == "Eldritch Horror") {
-                input_handler.DHSpecies->get_data()->push_back(new Species(stats));
+                input_handler->DHRoles->get_data()->push_back(new Role(stats));
+            } else if (type == "Eldritch Horror" || type == "Creature") {
+                input_handler->DHSpecies->get_data()->push_back(new Species(stats));
             }
-
+            fileIn.getline(single_line, 32); // To skip empty lines
+            delete stats;
         }
     }
 }

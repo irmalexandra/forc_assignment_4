@@ -7,23 +7,23 @@
 #include <cstring>
 #include <iostream>
 
-#include "InputHandler.h"
-
 #include "../Templates/BaseTemplate.h"
 #include "../Templates/Role.h"
 #include "../Templates/Species.h"
-
 #include "../Helpers/HelperFunctions.h"
+#include "InputHandler.h"
 
 using namespace std;
 
 class FileHandler {
 public:
-public:
     template<typename T> void write_to_file(T object, std::ostream out){
         out << object;
     };
-    void make_templates_list(string file_to_read, InputHandler input_handler);
+    void load_data(string file_to_read, InputHandler* input_handler);
+
+    Role* temp_shit();
+    Role* temp_shit2();
 
 };
 
