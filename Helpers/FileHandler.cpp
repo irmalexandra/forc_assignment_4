@@ -1,5 +1,37 @@
 #include "FileHandler.h"
 
+Role* FileHandler::temp_shit(){
+    auto stats = new speciesStats();
+    stats->name = "temphshit1";
+    stats->life_min = 3;
+    stats->life_max = 4;
+    stats->str_max = 5;
+    stats->str_min = 1;
+    stats->int_min = 1;
+    stats->int_max = 6;
+    Role* my_role = new Role((baseStats*) stats);
+//    auto thinggy = new DataHandler<Role>;
+//    thinggy->get_data()->push_back(my_role);
+//    thing->DHRoles = thinggy;
+    return my_role;
+}
+Role* FileHandler::temp_shit2(){
+    auto stats = new speciesStats();
+    stats->name = "tempshit2_thing";
+    stats->life_min = 6;
+    stats->life_max = 9;
+    stats->str_max = 1;
+    stats->str_min = 1;
+    stats->int_min = 1;
+    stats->int_max = 6;
+    Role* my_role = new Role((baseStats*) stats);
+//    auto thinggy = new DataHandler<Role>;
+//    thinggy->get_data()->push_back(my_role);
+//    thing->DHRoles = thinggy;
+    return my_role;
+}
+
+
 void FileHandler::load_data(string file_to_read, InputHandler* input_handler){
     char single_line[32] = {};
     auto thing = new vector<BaseTemplate>;
