@@ -11,10 +11,16 @@ bool create_another_character(){
 InputHandler::InputHandler() {
     this->individual_creator = new IndividualCreator();
     this->template_creator = new TemplateCreator();
+    this->file_handler = new FileHandler();
+
+
+    // Roster
     this->DHInvestigators = new DataHandler<Investigator>;
     this->DHPersons = new DataHandler<Person>;
     this->DHCreatures = new DataHandler<Creature>;
     this->DHEldritchHorrors = new DataHandler<EldritchHorror>;
+
+    // Templates
     this->DHSpecies = new DataHandler<Species>;
     this->DHRoles = new DataHandler<Role>;
 
@@ -38,6 +44,8 @@ InputHandler::~InputHandler() {
     delete this->DHPersons;
     delete this->DHSpecies;
     delete this->DHRoles;
+    delete this->file_handler;
+    delete this->payload;
 
     this->individual_creator = nullptr;
     this->DHInvestigators = nullptr;
@@ -46,6 +54,8 @@ InputHandler::~InputHandler() {
     this->DHEldritchHorrors = nullptr;
     this->DHSpecies = nullptr;
     this->DHRoles = nullptr;
+    this->file_handler = nullptr;
+    this->payload = nullptr;
 }
 
 void InputHandler::main_menu() {
@@ -68,6 +78,46 @@ void InputHandler::main_menu() {
                 break;
             case 5:
                 this->file_handler->save_templates(this->payload);
+                return;
+            default:
+                cout << choice << " is not an option" << endl;
+        }
+    }
+}
+
+void InputHandler::template_menu() {
+    int choice;
+    while(true){
+        cout << "1. View templates\n2. Edit templates\n3. Back" << endl;
+        cin >> choice;
+        switch (choice) {
+            case(1):
+                this->view_templates();
+                break;
+            case(2):
+                this->edit_templates();
+                break;
+            case(3):
+                return;
+            default:
+                cout << choice << " is not an option" << endl;
+        }
+    }
+}
+
+void InputHandler::individual_menu() {
+    int choice;
+    while(true){
+        cout << "1. View individuals\n2. Create individual\n3. Back" << endl;
+        cin >> choice;
+        switch (choice) {
+            case(1):
+                this->view_individuals();
+                break;
+            case(2):
+                this->select_template_for_individual();
+                break;
+            case(3):
                 return;
             default:
                 cout << choice << " is not an option" << endl;
@@ -174,9 +224,6 @@ void InputHandler::create_template() {
        }
         create_process = create_another_character();
     }
-
-
-
 }
 
 void InputHandler::view_individuals_by_category() {
@@ -184,6 +231,12 @@ void InputHandler::view_individuals_by_category() {
     int choice;
 
     while(true){
+        cout << "Select a character type" << std::endl;
+        cout << "1. Investigator" << endl;
+        cout << "2. Person (NPC)" << endl;
+        cout << "3. Creature" << endl;
+        cout << "4. Eldritch Horror" << endl;
+        cout << "5. Back" << std::endl;
         cin >> choice;
         switch(choice){
             case 1:
@@ -259,11 +312,22 @@ void InputHandler::view_shortened_individuals(){
     }
 }
 
+void InputHandler::view_all_individuals() const {
+    cout << "Created individuals\n" << endl;
+    cout << "Investigators:" << endl;
+    cout << this->DHInvestigators << endl;
+    cout << "\nNPCs:" << endl;
+    cout << this->DHPersons << endl;
+    cout << "\nCreatures:" << endl;
+    cout << this->DHCreatures << endl;
+    cout << "\nEldritch Horrors" << endl;
+    cout << this->DHEldritchHorrors << endl;
+}
 
 void InputHandler::view_individuals() {
     int choice;
     while(true){
-        cout << "1. View all individuals\n2. View investigators\n3. Back" << endl;
+        cout << "1. View all individuals\n2. View by category\n3. Back" << endl;
         cin >> choice;
         switch (choice) {
             case(1):
@@ -297,6 +361,26 @@ void InputHandler::delete_template(){
 
         if(role_index != -1){
             this->DHRoles->get_data()->erase(this->DHRoles->get_data()->begin() + role_index);
+        }
+    }
+}
+
+void InputHandler::edit_templates() {
+    int choice;
+    while(true){
+        cout << "1. Create templates\n2. Delete template\n3. Back" << endl;
+        cin >> choice;
+        switch (choice) {
+            case(1):
+                this->create_template();
+                break;
+            case(2):
+                this->delete_template();
+                break;
+            case(3):
+                return;
+            default:
+                cout << choice << " is not an option" << endl;
         }
     }
 }

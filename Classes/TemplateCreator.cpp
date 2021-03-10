@@ -9,6 +9,7 @@ speciesStats* TemplateCreator::get_species_stats(){
     cin >> choice;
     switch (choice) {
         case 'y':
+            species_stats->type = "Eldritch Horror";
             species_stats->is_eldritch = true;
 
             species_stats->unnatural = true;
@@ -18,6 +19,7 @@ speciesStats* TemplateCreator::get_species_stats(){
             species_stats->trauma_max = get_int_within_range(species_stats->trauma_min, 3, "Enter upper range for traumatism: ");
             break;
         case 'n':
+            species_stats->type = "Creature";
             species_stats->is_eldritch = false;
 
             cout << "Unnatural? (y/n)" << endl;
@@ -42,6 +44,7 @@ Species *TemplateCreator::create_species() {
 
 Role *TemplateCreator::create_role() {
     auto role_stats = new baseStats();
+    role_stats->type = "Person";
     get_base_stats(role_stats);
 
     return new Role(role_stats);
@@ -65,7 +68,7 @@ void TemplateCreator::get_base_stats(baseStats* base_stats) {
     base_stats->int_min = get_int_within_range(0, 10, "Enter lower range for intelligence: ");
     base_stats->int_max = get_int_within_range(base_stats->int_min, 10, "Enter upper range for intelligence: ");
 
-    base_stats->str_min= get_int_within_range(0, 10, "Enter lower range for strength: ");
+    base_stats->str_min = get_int_within_range(0, 10, "Enter lower range for strength: ");
     base_stats->str_max = get_int_within_range(base_stats->str_min, 10, "Enter upper range for strength: ");
 
 }

@@ -11,9 +11,37 @@
 #include "../Templates/Role.h"
 #include "../Templates/Species.h"
 #include "../Helpers/HelperFunctions.h"
-#include "InputHandler.h"
+#include "DataHandler.h"
+
 
 using namespace std;
+
+struct Payload {
+    Payload(
+            DataHandler<Investigator>* dh_investigators,
+            DataHandler<Person>* dh_persons,
+            DataHandler<Creature>* dh_creatures,
+            DataHandler<EldritchHorror>* dh_eldritch_horrors,
+            DataHandler<Species>* dh_species,
+            DataHandler<Role>* dh_roles){
+        this->DHInvestigators = dh_investigators;
+        this->DHPersons = dh_persons;
+        this->DHCreatures = dh_creatures;
+        this->DHEldritch_Horrors = dh_eldritch_horrors;
+        this->DHSpecies = dh_species;
+        this->DHRoles = dh_roles;
+    }
+
+    // ROSTER
+    DataHandler<Investigator>* DHInvestigators;
+    DataHandler<Person>* DHPersons;
+    DataHandler<Creature>* DHCreatures;
+    DataHandler<EldritchHorror>* DHEldritch_Horrors;
+
+    // Templates
+    DataHandler<Species>* DHSpecies;
+    DataHandler<Role>* DHRoles;
+};
 
 class FileHandler {
 public:

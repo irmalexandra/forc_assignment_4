@@ -7,22 +7,35 @@
 
 class Being {
 public:
-    Being(int* life, int* strength, int* intelligence);
+    Being(BaseTemplate* base_template);
+    Being(baseIndividualStats* stats);
 //    ~Being();
+
+    void edit();
 
     int get_life();
     int get_strength();
     int get_intelligence();
+    std::string get_name();
 
+    void set_name(std::string* name);
     void set_life(int* life);
     void set_strength(int* strength);
     void set_intelligence(int* intelligence);
 
+    BaseTemplate* get_template();
+
     friend std::ostream& operator<< (std::ostream& out, Being* being);
+
+protected:
+    std::string name;
+
 private:
     int life;
     int strength;
     int intelligence;
+
+    BaseTemplate* base_template;
 };
 
 

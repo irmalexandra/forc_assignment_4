@@ -16,6 +16,8 @@
 #include "../Templates/Role.h"
 #include "../Templates/Species.h"
 
+#include "FileHandler.h"
+
 
 using namespace std;
 class InputHandler {
@@ -34,7 +36,7 @@ public:
     DataHandler<Species>* DHSpecies;
     DataHandler<Role>* DHRoles;
 
-    void displayCharacterTypes();
+    void view_individuals_by_category();
     void main_menu();
 
 private:

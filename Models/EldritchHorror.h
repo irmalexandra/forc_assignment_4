@@ -4,11 +4,13 @@
 
 #include "Creature.h"
 #include "iostream"
+#include "../Templates/Species.h"
+#include "../Helpers/HelperFunctions.h"
 
 class EldritchHorror: public Creature{
 
 public:
-    EldritchHorror(const int* traumatism, int* life, int* strength, int* intelligence);
+    explicit EldritchHorror(std::string* name, Species* species);
 
     int get_traumatism();
     void edit();

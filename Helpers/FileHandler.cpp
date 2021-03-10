@@ -38,6 +38,7 @@ void FileHandler::load_templates(Payload* payload){
             fileIn.getline(single_line, 32);
             line_str = string(single_line);
             type = line_str;
+            stats->type = type;
 
             fileIn.getline(single_line, 32);
             line_str = string(single_line);
@@ -82,9 +83,9 @@ void FileHandler::load_templates(Payload* payload){
             }
 
             if (type == "Person"){
-                input_handler->DHRoles->get_data()->push_back(new Role(stats));
+                payload->DHRoles->get_data()->push_back(new Role(stats));
             } else if (type == "Eldritch Horror" || type == "Creature") {
-                input_handler->DHSpecies->get_data()->push_back(new Species(stats));
+                payload->DHSpecies->get_data()->push_back(new Species(stats));
             }
             fileIn.getline(single_line, 32); // To skip empty lines
             delete stats;
