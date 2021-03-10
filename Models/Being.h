@@ -18,11 +18,13 @@ public:
     int get_strength();
     int get_intelligence();
     std::string get_name();
+    bool get_is_investigator();
 
     void set_name(std::string* name);
     void set_life(int* life);
     void set_strength(int* strength);
     void set_intelligence(int* intelligence);
+    void set_is_investigator(bool* is_investigator);
 
     BaseTemplate* get_template();
 

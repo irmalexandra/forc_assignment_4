@@ -75,6 +75,17 @@ void Being::set_strength(int* strength) {
     strength = nullptr;
 }
 
+bool Being::get_is_investigator() {
+    return this->is_investigator;
+}
+
+void Being::set_is_investigator(bool *is_investigator) {
+    this->is_investigator = *is_investigator;
+
+    delete is_investigator;
+    is_investigator = nullptr;
+}
+
 std::ostream& operator<< (std::ostream& out, Being* being) {
     out << "Name: " << being->get_name() << std::endl;
     if (being->get_is_investigator()){

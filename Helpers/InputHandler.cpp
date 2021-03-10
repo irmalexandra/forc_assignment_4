@@ -169,6 +169,7 @@ void InputHandler::select_template_for_individual() {
                 cin >> choice;
                 if (choice == 1){
                     auto new_investigator = individual_creator->createInvestigator(role);
+                    new_investigator->set_is_investigator(new bool(true));
                     this->DHInvestigators->get_data()->push_back(new_investigator);
                     cout << new_investigator << endl << "Do you wish to edit this individual?\n1. yes\n2. no" << endl;
                     cin >> choice;
@@ -178,6 +179,7 @@ void InputHandler::select_template_for_individual() {
                 }
                 else if (choice == 2){
                     auto new_person = individual_creator->createPerson(role);
+                    new_person->set_is_investigator(new bool(false));
                     this->DHPersons->get_data()->push_back(new_person);
                     cout << new_person << endl << "Do you wish to edit this individual?\n1. yes\n2. no" << endl;
                     cin >> choice;
