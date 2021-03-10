@@ -4,6 +4,7 @@
 
 #include "Person.h"
 #include "iostream"
+#include "../Templates/Role.h"
 
 class Investigator: public Person {
 public:

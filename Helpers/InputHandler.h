@@ -1,8 +1,9 @@
 #ifndef FORC_PA_4_INPUTHANDLER_H
 #define FORC_PA_4_INPUTHANDLER_H
-#include "vector"
-#include "iostream"
-#include "fstream"
+#include <vector>
+#include <algorithm>
+#include <iostream>
+#include <fstream>
 
 #include "../Models/Investigator.h"
 #include "../Models/Person.h"
@@ -39,7 +40,9 @@ public:
 private:
 
     void individual_menu();
-    void create_individual();
+    void select_template_for_individual();
+    void create_individual_species(Species* species);
+    void create_individual_role(Role* role);
     void view_individuals();
     void view_all_individuals() const;
     void view_single_template(int species_index, int role_index);
@@ -50,7 +53,15 @@ private:
     void view_shortened_templates();
     void edit_templates();
     void delete_template();
+    int get_index_roles(const string& name) const;
+    int get_index_species(const string& name) const;
 
+
+    void view_shortened_individuals();
+
+    Payload* payload;
+
+    FileHandler* file_handler;
 };
 
 

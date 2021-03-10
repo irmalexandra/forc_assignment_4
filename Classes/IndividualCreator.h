@@ -2,6 +2,8 @@
 #define FORC_PA_4_INDIVIDUALCREATOR_H
 
 #include <random>
+#include <string>
+#include <map>
 #include "../Models/Investigator.h"
 #include "../Models/EldritchHorror.h"
 #include "../Models/Creature.h"

@@ -5,7 +5,8 @@
 #include "Being.h"
 #include "string"
 #include "iostream"
-
+#include "../Helpers/HelperFunctions.h"
+#include "../Templates/Role.h"
 
 class Person: public Being {
 public:

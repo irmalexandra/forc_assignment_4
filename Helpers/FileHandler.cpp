@@ -6,7 +6,7 @@
 void FileHandler::load_templates(Payload* payload){
     char single_line[32] = {};
     auto thing = new vector<BaseTemplate>;
-
+    string filename = "../Resources/template_file.txt";
     speciesStats* stats;
 
     string name;
@@ -17,7 +17,7 @@ void FileHandler::load_templates(Payload* payload){
     int amount;
 
     string line_str;
-    ifstream fileIn (file_to_read);
+    ifstream fileIn (filename);
     while (!fileIn.eof()){
         fileIn.getline(single_line, 32);
         line_str = string(single_line);

@@ -75,48 +75,74 @@ void InputHandler::main_menu() {
     }
 }
 
-void InputHandler::create_individual() {
-    Investigator* investigator;
-    Person* person;
-    Creature* creature;
-    EldritchHorror* eldritch_horror;
-
-    bool create_process = true;
-
-
-
-    int choice = 0;
-    while (create_process){
-        this->displayCharacterTypes();
-        std::cin >> choice;
-        switch (choice) {
-            case 1:
-                investigator = this->individual_creator->createInvestigator();
-                this->DHInvestigators->get_data()->push_back(investigator);
-                create_process = create_another_character();
-                break;
-            case 2:
-                person = this->individual_creator->createPerson();
-                this->DHPersons->get_data()->push_back(person);
-                create_process = create_another_character();
-                break;
-            case 3:
-                creature = this->individual_creator->createCreature();
-                this->DHCreatures->get_data()->push_back(creature);
-                create_process = create_another_character();
-                break;
-            case 4:
-                eldritch_horror = this->individual_creator->createEldritchHorror();
-                this->DHEldritchHorrors->get_data()->push_back(eldritch_horror);
-                create_process = create_another_character();
-                break;
-            case 5:
-                return;
-            default:
-                std::cout << "Invalid selection: " << choice << std::endl;
-                break;
-        }
+void InputHandler::select_template_for_individual() {
+    this->view_shortened_templates();
+    string name;
+    cout << "Enter the name of the template you want to view." << endl;
+    cin >> name;
+    auto species_index = this->get_index_species(name);
+    auto role_index = this->get_index_roles(name);
+    if (role_index == -1 && species_index == -1) {
+        cout << name << " does not exist!" << endl;
+    } else {
+        this->view_single_template(species_index, role_index);
     }
+    cout << "1. Create Individual based on this template\n2. Return" << endl;
+    int choice = 0;
+    cin >> choice;
+    switch (choice) {
+        case 1:
+            if (species_index >= 0) {
+                auto species = this->DHSpecies->get_data()->at(species_index);
+                if (species->get_is_eldritch()){
+                    auto new_eldritch_horror = individual_creator->createEldritchHorror(species);
+                    this->DHEldritchHorrors->get_data()->push_back(new_eldritch_horror);
+                    cout << new_eldritch_horror << endl << "Do you wish to edit this individual?\n1. yes\n2. no" << endl;
+                    cin >> choice;
+                    if(choice == 1){
+                        new_eldritch_horror->edit();
+                    }
+                }
+                else {
+                    auto new_creature = individual_creator->createCreature(species);
+                    this->DHCreatures->get_data()->push_back(new_creature);
+                    cout << new_creature << endl << "Do you wish to edit this individual?\n1. yes\n2. no" << endl;
+                    cin >> choice;
+                    if(choice == 1){
+                        new_creature->edit();
+                    }
+                }
+
+            } else if (role_index >= 0) {
+                auto role = this->DHRoles->get_data()->at(role_index);
+                cout << "1. Investigator (playable character)\n2. Person (NPC)\n3. Return" << endl;
+                cin >> choice;
+                if (choice == 1){
+                    auto new_investigator = individual_creator->createInvestigator(role);
+                    this->DHInvestigators->get_data()->push_back(new_investigator);
+                    cout << new_investigator << endl << "Do you wish to edit this individual?\n1. yes\n2. no" << endl;
+                    cin >> choice;
+                    if(choice == 1){
+                        new_investigator->edit();
+                    }
+
+                }
+                else if (choice == 2){
+                    auto new_person = individual_creator->createPerson(role);
+                    this->DHPersons->get_data()->push_back(new_person);
+                    cout << new_person << endl << "Do you wish to edit this individual?\n1. yes\n2. no" << endl;
+                    cin >> choice;
+                    if(choice == 1){
+                        new_person->edit();
+                    }
+
+
+                }
+            }
+        case 2:
+            return;
+    }
+//
 }
 
 void InputHandler::create_template() {
@@ -254,8 +280,25 @@ void InputHandler::view_individuals() {
     }
 }
 
-void InputHandler::delete_template() {
+void InputHandler::delete_template(){
+    string name;
+    this->view_shortened_templates();
+    cout << "Enter the name of the template you want deleted." << endl;
+    cin >> name;
+    auto species_index = this->get_index_species(name);
+    auto role_index = this->get_index_roles(name);
+    if(role_index == -1 && species_index == -1){
+        cout << name << " does not exist!" << endl;
+    }
+    else{
+        if(species_index != -1){
+            this->DHSpecies->get_data()->erase(this->DHSpecies->get_data()->begin() + species_index);
+        }
 
+        if(role_index != -1){
+            this->DHRoles->get_data()->erase(this->DHRoles->get_data()->begin() + role_index);
+        }
+    }
 }
 
 int InputHandler::get_index_roles(const string& name) const{
