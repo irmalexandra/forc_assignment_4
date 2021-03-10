@@ -4,6 +4,7 @@
 
 std::vector<std::string>* split_string(std::string string_in, char delim){
     auto* ret_str = new std::vector<std::string>;
+    if (string_in.length() < 1) return ret_str;
     std::string temp_string = "";
     for (auto i : string_in){
         if (i == delim){

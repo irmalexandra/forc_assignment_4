@@ -146,6 +146,7 @@ void InputHandler::select_template_for_individual() {
                 auto species = this->DHSpecies->get_data()->at(species_index);
                 if (species->get_is_eldritch()){
                     auto new_eldritch_horror = individual_creator->createEldritchHorror(species);
+                    new_eldritch_horror->set_is_investigator(new bool(false));
                     this->DHEldritchHorrors->get_data()->push_back(new_eldritch_horror);
                     cout << new_eldritch_horror << endl << "Do you wish to edit this individual?\n1. yes\n2. no" << endl;
                     cin >> choice;
@@ -155,6 +156,7 @@ void InputHandler::select_template_for_individual() {
                 }
                 else {
                     auto new_creature = individual_creator->createCreature(species);
+                    new_creature->set_is_investigator(new bool(false));
                     this->DHCreatures->get_data()->push_back(new_creature);
                     cout << new_creature << endl << "Do you wish to edit this individual?\n1. yes\n2. no" << endl;
                     cin >> choice;
