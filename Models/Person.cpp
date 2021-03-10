@@ -7,7 +7,6 @@ Person::Person(std::string* name, std::string* gender, Role* role_template): Bei
     this->gender = *gender;
     this->role = role_template->get_name();
     this->fear = get_random_integer(role_template->get_fear_range());
-
     this->role_template = role_template;
 
     delete name;
@@ -15,6 +14,15 @@ Person::Person(std::string* name, std::string* gender, Role* role_template): Bei
 
     delete gender;
     gender = nullptr;
+}
+Person::Person(baseIndividualStats *stats, Role* base_template): Being(stats) {
+    this->name = stats->name;
+    this->gender = stats->gender;
+    this->role = base_template->get_name();
+    this->fear = stats->fear;
+    this->role_template = base_template;
+    delete stats;
+    stats = nullptr;
 }
 
 
@@ -57,7 +65,6 @@ void Person::set_fear(int *fear) {
 
 std::ostream& operator<< (std::ostream& out, Person* person) {
     out << (Being*)(person);
-    out << "Role: " << person->get_role() << std::endl;
     out << "Gender: " << person->get_gender() << std::endl;
     out << "Fear: " << person->get_fear() << std::endl;
     return out;
@@ -136,4 +143,5 @@ void Person::edit() {
         }
     }
 }
+
 

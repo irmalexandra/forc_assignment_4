@@ -8,6 +8,10 @@ EldritchHorror::EldritchHorror(std::string* name, Species* species):Creature(nam
     this->traumatism = get_random_integer(species->get_traumatism_range());
 }
 
+EldritchHorror::EldritchHorror(baseIndividualStats* stats, Species* species):Creature(stats, species) {
+    this->traumatism = stats->traumatism;
+}
+
 int EldritchHorror::get_traumatism() {
     return this->traumatism;
 }
@@ -107,3 +111,5 @@ void EldritchHorror::edit() {
         }
     }
 }
+
+

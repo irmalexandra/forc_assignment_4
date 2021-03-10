@@ -9,6 +9,7 @@ class Being {
 public:
     Being(BaseTemplate* base_template);
     Being(baseIndividualStats* stats);
+    Being(baseIndividualStats *stats, BaseTemplate* base_template);
 //    ~Being();
 
     void edit();
@@ -34,6 +35,7 @@ private:
     int life;
     int strength;
     int intelligence;
+    bool is_investigator;
 
     BaseTemplate* base_template;
 };

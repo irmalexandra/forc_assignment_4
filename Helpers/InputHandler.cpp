@@ -74,7 +74,7 @@ void InputHandler::main_menu() {
                 this->file_handler->save_roster(this->payload, new string("../gofuckyourself.txt"));
                 break;
             case 4:
-                this->file_handler->load_roster(this->payload, new string("../gofuckyourselfagain.txt"));
+                this->file_handler->load_roster(this->payload, new string("../gofuckyourself.txt"));
                 break;
             case 5:
                 this->file_handler->save_templates(this->payload);
@@ -175,7 +175,6 @@ void InputHandler::select_template_for_individual() {
                     if(choice == 1){
                         new_investigator->edit();
                     }
-
                 }
                 else if (choice == 2){
                     auto new_person = individual_creator->createPerson(role);
@@ -185,8 +184,6 @@ void InputHandler::select_template_for_individual() {
                     if(choice == 1){
                         new_person->edit();
                     }
-
-
                 }
             }
         case 2:

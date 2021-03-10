@@ -11,6 +11,7 @@ class EldritchHorror: public Creature{
 
 public:
     explicit EldritchHorror(std::string* name, Species* species);
+    EldritchHorror(baseIndividualStats* stats, Species* species);
 
     int get_traumatism();
     void edit();

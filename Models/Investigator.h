@@ -9,6 +9,7 @@
 class Investigator: public Person {
 public:
     Investigator(std::string* name, std::string* gender, Role* base_template);
+    Investigator(baseIndividualStats* base_stats, Role* base_template);
     int get_terror();
     void set_terror(int* terror);
 

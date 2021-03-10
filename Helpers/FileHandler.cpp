@@ -40,6 +40,7 @@ void FileHandler::load_templates(Payload* payload){
             type = line_str;
             stats->type = type;
 
+
             fileIn.getline(single_line, 32);
             line_str = string(single_line);
             temp_string_array = split_string(split_string(line_str)->at(1), '-');
@@ -120,8 +121,9 @@ void FileHandler::save_roster(Payload* payload, string* roster_name){
 
 void FileHandler::load_roster(Payload *payload, string *roster_name) {
     char single_line[32] = {};
+    cout << *roster_name << endl;
     ifstream fileIn (*roster_name);
-    baseIndividualStats* stats;
+    auto stats = new baseIndividualStats();
 
     string line_string;
     string type;
@@ -140,7 +142,7 @@ void FileHandler::load_roster(Payload *payload, string *roster_name) {
         for(int i = 0; i < amount; i++){
             fileIn.getline(single_line, 32);
             line_string = string(single_line);
-            stats->name = line_string;
+            stats->name = split_string(line_string)->at(1);
 
             fileIn.getline(single_line, 32);
             line_string = string(single_line);
@@ -148,7 +150,7 @@ void FileHandler::load_roster(Payload *payload, string *roster_name) {
 
             fileIn.getline(single_line, 32);
             line_string = string(single_line);
-            template_name = split_string(line_string)->at(1);
+            template_name = line_string;
 
             fileIn.getline(single_line, 32);
             line_string = string(single_line);
@@ -166,9 +168,12 @@ void FileHandler::load_roster(Payload *payload, string *roster_name) {
             line_string = string(single_line);
             if(type == "Creature"){
                 // IMPLEMENT TEMPLATE LOOKUP
-                auto it = find_if(payload->DHSpecies->get_data()->begin(), payload->DHSpecies->get_data()->end(), [&template_name]( Species* obj) {return obj->get_name() == template_name;});
+                stats->unnatural = (line_string != "Natural");
+                fileIn.getline(single_line, 32);
+                line_string = string(single_line);
+                stats->disquiet = stoi(split_string(line_string)->at(1));
 
-                auto index = std::distance(payload->DHSpecies->get_data()->begin(), it);
+
 
                 auto species = payload->DHSpecies->get_data()->at(index);
 

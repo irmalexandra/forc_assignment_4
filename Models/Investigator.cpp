@@ -11,6 +11,12 @@ Person(name, gender, role_template){
     this->role_template = role_template;
 }
 
+Investigator::Investigator(baseIndividualStats *base_stats, Role *base_template)
+:Person(base_stats, base_template) {
+    this->terror = base_stats->terror;
+    this->role_template = base_template;
+}
+
 int Investigator::get_terror() {
     return this->terror;
 }

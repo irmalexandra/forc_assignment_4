@@ -40,7 +40,7 @@ EldritchHorror *IndividualCreator::createEldritchHorror(Species* selected_specie
 
 string* IndividualCreator::get_individual_name(string template_type, string template_name){
     auto new_name = new string(template_name);
-    if (template_type == "Person"){
+    if (template_type == "Person" || template_type == "Investigator"){
         cout << "Enter the name of the character you are creating." << endl;
         cin >> *new_name;
     }

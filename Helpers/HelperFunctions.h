@@ -19,6 +19,7 @@ struct baseStats {
 struct baseIndividualStats{
     std::string name = "";
     std::string type = "unchanged from base_Stats";
+    std::string gender = "";
     int life = 0;
     int strength= 0;
     int intelligence= 0;
@@ -26,6 +27,7 @@ struct baseIndividualStats{
     int disquiet = 0;
     int fear = 0;
     int traumatism = 0;
+    int terror = 0;
 
 };
 

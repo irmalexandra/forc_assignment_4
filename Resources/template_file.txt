@@ -33,7 +33,7 @@ Unnatural
 Disquiet: 10-10
 Traumatism: 2-2
 
-5
+3
 Name: Nurse
 Person
 Life: 5-7
@@ -51,16 +51,4 @@ Person
 Life: 4-6
 Strength: 1-5
 Intelligence: 8-10
-
-Name: theRole
-Person
-Life: 2-5
-Strength: 2-5
-Intelligence: 2-5
-
-Name: chanman
-Person
-Life: 2-5
-Strength: 2-4
-Intelligence: 2-5
 

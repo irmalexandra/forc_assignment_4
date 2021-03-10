@@ -11,7 +11,7 @@
 class Person: public Being {
 public:
     Person(std::string* name, std::string* gender, Role* base_template);
-
+    Person(baseIndividualStats* stats, Role* base_template);
     std::string get_gender();
     std::string get_role();
 

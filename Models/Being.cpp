@@ -16,6 +16,15 @@ Being::Being(baseIndividualStats *stats) {
     this->intelligence = stats->intelligence;
 }
 
+Being::Being(baseIndividualStats *stats, BaseTemplate* base_template) {
+    this->life = stats->life;
+    this->strength = stats->strength;
+    this->intelligence = stats->intelligence;
+    this->is_investigator = false;
+
+    this->base_template = base_template;
+}
+
 void Being::set_name(std::string* name){
     this->name = *name;
 
@@ -66,8 +75,12 @@ void Being::set_strength(int* strength) {
 
 std::ostream& operator<< (std::ostream& out, Being* being) {
     out << "Name: " << being->get_name() << std::endl;
-    out << being->get_template()->get_type() << std::endl;
-    out << "Base Template: " << being->get_template()->get_name() << std::endl;
+    if (being->get_is_investigator()){
+        out << "Investigator" << std::endl;
+    }else{
+        out << being->get_template()->get_type() << std::endl;
+    }
+    out << being->get_template()->get_name() << std::endl;
     out << "Life: " << being->get_life() << std::endl;
     out << "Strength: " << being->get_strength() << std::endl;
     out << "Intelligence: " << being->get_intelligence() << std::endl;
