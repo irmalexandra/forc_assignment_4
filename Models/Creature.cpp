@@ -15,7 +15,7 @@ Creature::Creature(std::string* name, Species* species): Being(species){
     name = nullptr;
 }
 
-Creature::Creature(baseIndividualStats* stats, Species* species): Being(stats){
+Creature::Creature(baseIndividualStats* stats, Species* species): Being(stats, (BaseTemplate*)species){
     this->name = stats->name;
     this->unnatural = stats->unnatural;
     this->disquiet = stats->disquiet;

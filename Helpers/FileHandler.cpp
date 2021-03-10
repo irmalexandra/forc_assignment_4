@@ -166,7 +166,12 @@ void FileHandler::load_roster(Payload *payload, string *roster_name) {
 
             fileIn.getline(single_line, 32);
             line_string = string(single_line);
-            if(type == "Creature"){
+            if(type == "Creature" || type == "Eldritch Horror"){
+                auto it = find_if(payload->DHSpecies->get_data()->begin(), payload->DHSpecies->get_data()->end(),
+                                  [&template_name]( Species* obj) {return obj->get_name() == template_name;});
+                auto index = std::distance(payload->DHSpecies->get_data()->begin(), it);
+                auto species = payload->DHSpecies->get_data()->at(index);
+
                 // IMPLEMENT TEMPLATE LOOKUP
                 stats->unnatural = (line_string != "Natural");
                 fileIn.getline(single_line, 32);
@@ -175,12 +180,38 @@ void FileHandler::load_roster(Payload *payload, string *roster_name) {
 
 
 
-                auto species = payload->DHSpecies->get_data()->at(index);
+                if (type == "Eldritch Horror"){
+                    fileIn.getline(single_line, 32);
+                    line_string = string(single_line);
+                    stats->traumatism = stoi(split_string(line_string)->at(1));
+                    payload->DHEldritch_Horrors->get_data()->push_back(new EldritchHorror(stats, species));
 
-                payload->DHCreatures->get_data()->push_back(new Creature(stats, species));
+                }
+                else{
+                    payload->DHCreatures->get_data()->push_back(new Creature(stats, species));
+                }
+
             }
+            else{
+                stats->gender = split_string(line_string)->at(1);
+                fileIn.getline(single_line, 32);
+                line_string = string(single_line);
+                stats->fear = stoi(split_string(line_string)->at(1));
 
-
+                auto it = find_if(payload->DHRoles->get_data()->begin(), payload->DHRoles->get_data()->end(),
+                                  [&template_name]( Role* obj) {return obj->get_name() == template_name;});
+                auto index = std::distance(payload->DHRoles->get_data()->begin(), it);
+                auto role = payload->DHRoles->get_data()->at(index);
+                if(type == "Person"){
+                    payload->DHPersons->get_data()->push_back(new Person(stats, role));
+                }
+                if(type == "Investigator"){
+                    fileIn.getline(single_line, 32);
+                    line_string = string(single_line);
+                    stats->terror = stoi(split_string(line_string)->at(1));
+                    payload->DHPersons->get_data()->push_back(new Investigator(stats, role));
+                }
+            }
         }
     }
 

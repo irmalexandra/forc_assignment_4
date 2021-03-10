@@ -14,6 +14,8 @@ Being::Being(baseIndividualStats *stats) {
     this->life = stats->life;
     this->strength = stats->strength;
     this->intelligence = stats->intelligence;
+    this->is_investigator = false;
+
 }
 
 Being::Being(baseIndividualStats *stats, BaseTemplate* base_template) {
