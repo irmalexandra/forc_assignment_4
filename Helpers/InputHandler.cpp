@@ -60,6 +60,7 @@ InputHandler::~InputHandler() {
 
 void InputHandler::main_menu() {
     int choice;
+    string filename;
     while(true){
         cout << "1. Templates\n2. Individuals\n3. Save current roster\n4. Load new roster\n5. Quit" << endl;
         cin >> choice;
@@ -71,10 +72,14 @@ void InputHandler::main_menu() {
                 this->individual_menu();
                 break;
             case 3:
-                this->file_handler->save_roster(this->payload, new string("../gofuckyourself.txt"));
+                cout << "Enter the filename of the new roster: ";
+                cin >> filename;
+                this->file_handler->save_roster(this->payload, new string(filename));
                 break;
             case 4:
-                this->file_handler->load_roster(this->payload, new string("../gofuckyourself.txt"));
+                cout << "Enter the filename of the roster you want to load: ";
+                cin >> filename;
+                this->file_handler->load_roster(this->payload, new string(filename));
                 break;
             case 5:
                 this->file_handler->save_templates(this->payload);
@@ -178,6 +183,8 @@ void InputHandler::select_template_for_individual() {
                     if(choice == 1){
                         new_investigator->edit();
                     }
+                    auto_save();
+
                 }
                 else if (choice == 2){
                     auto new_person = individual_creator->createPerson(role);
@@ -188,6 +195,7 @@ void InputHandler::select_template_for_individual() {
                     if(choice == 1){
                         new_person->edit();
                     }
+                    auto_save();
                 }
             }
         case 2:
@@ -258,8 +266,6 @@ void InputHandler::view_individuals_by_category() {
                 cout<<"Error"<<endl;
         }
     }
-
-
 }
 
 void InputHandler::view_templates() {
@@ -406,4 +412,8 @@ int InputHandler::get_index_species(const string& name) const {
         }
     }
     return index;
+}
+
+void InputHandler::auto_save(){
+    this->file_handler->save_roster(this->payload, new string("../roster_backup.txt"));
 }

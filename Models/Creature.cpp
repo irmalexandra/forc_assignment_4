@@ -21,9 +21,6 @@ Creature::Creature(baseIndividualStats* stats, Species* species): Being(stats, (
     this->disquiet = stats->disquiet;
 
     this->species = species;
-
-    delete stats;
-    stats = nullptr;
 };
 
 Species* Creature::get_template(){

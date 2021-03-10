@@ -48,7 +48,7 @@ private:
     void view_individuals();
     void view_all_individuals() const;
     void view_single_template(int species_index, int role_index);
-
+    void auto_save();
     void template_menu();
     void create_template();
     void view_templates();

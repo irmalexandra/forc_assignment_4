@@ -153,6 +153,7 @@ void FileHandler::load_roster(Payload *payload, string *roster_name) {
             fileIn.getline(single_line, 32);
             line_string = string(single_line);
             type = line_string;
+            stats->type = type;
 
             fileIn.getline(single_line, 32);
             line_string = string(single_line);
@@ -215,13 +216,11 @@ void FileHandler::load_roster(Payload *payload, string *roster_name) {
                     fileIn.getline(single_line, 32);
                     line_string = string(single_line);
                     stats->terror = stoi(split_string(line_string).at(1));
-                    payload->DHPersons->get_data()->push_back(new Investigator(stats, role));
+                    payload->DHInvestigators->get_data()->push_back(new Investigator(stats, role));
                 }
             }
             fileIn.getline(single_line, 32);
             line_string = string(single_line);
-            delete stats;
-            stats = nullptr;
         }
 
     }
