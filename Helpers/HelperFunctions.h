@@ -4,7 +4,7 @@
 #include "vector"
 #include "iostream"
 
-
+using namespace std;
 struct baseStats {
     std::string name = "";
     std::string type= "unchanged from base_Stats";
@@ -53,6 +53,8 @@ int get_random_integer(const Range& range);
 int get_int_within_range(int lower, int upper, const std::string& display_string);
 std::string* gender_picker();
 
-std::vector<std::string>* split_string(std::string string, char delim = ' ');
+//std::vector<std::string>* split_string(std::string string, char delim = ' ');
+
+std::vector<std::string> split_string(string str, string token = " ");
 
 #endif //FORC_PA_4_HELPERFUNCTIONS_H

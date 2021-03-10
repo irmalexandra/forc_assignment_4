@@ -32,7 +32,7 @@ void FileHandler::load_templates(Payload* payload){
             stats = new speciesStats();
             fileIn.getline(single_line, 32);
             line_str = string(single_line);
-            name = split_string(line_str)->at(1);
+            name = split_string(line_str).at(1);
             stats->name = name;
 
             fileIn.getline(single_line, 32);
@@ -43,19 +43,19 @@ void FileHandler::load_templates(Payload* payload){
 
             fileIn.getline(single_line, 32);
             line_str = string(single_line);
-            temp_string_array = split_string(split_string(line_str)->at(1), '-');
+            *temp_string_array = split_string(split_string(line_str).at(1), "-");
             stats->life_min = stoi(temp_string_array->at(0));
             stats->life_max = stoi(temp_string_array->at(1));
 
             fileIn.getline(single_line, 32);
             line_str = string(single_line);
-            temp_string_array = split_string(split_string(line_str)->at(1), '-');
+            *temp_string_array = split_string(split_string(line_str).at(1), "-");
             stats->str_min = stoi(temp_string_array->at(0));
             stats->str_max = stoi(temp_string_array->at(1));
 
             fileIn.getline(single_line, 32);
             line_str = string(single_line);
-            temp_string_array = split_string(split_string(line_str)->at(1), '-');
+            *temp_string_array = split_string(split_string(line_str).at(1), "-");
             stats->int_min = stoi(temp_string_array->at(0));
             stats->int_max = stoi(temp_string_array->at(1));
 
@@ -70,13 +70,13 @@ void FileHandler::load_templates(Payload* payload){
                 }
                 fileIn.getline(single_line, 32);
                 line_str = string(single_line);
-                temp_string_array = split_string(split_string(line_str)->at(1), '-');
+                *temp_string_array = split_string(split_string(line_str).at(1), "-");
                 stats->dis_min = stoi(temp_string_array->at(0));
                 stats->dis_max = stoi(temp_string_array->at(1));
                 if(type == "Eldritch Horror"){
                     fileIn.getline(single_line, 32);
                     line_str = string(single_line);
-                    temp_string_array = split_string(split_string(line_str)->at(1), '-');
+                    *temp_string_array = split_string(split_string(line_str).at(1), "-");
                     stats->trauma_min = stoi(temp_string_array->at(0));
                     stats->trauma_max = stoi(temp_string_array->at(1));
                     stats->is_eldritch = true;
@@ -123,7 +123,7 @@ void FileHandler::load_roster(Payload *payload, string *roster_name) {
     char single_line[32] = {};
     cout << *roster_name << endl;
     ifstream fileIn (*roster_name);
-    auto stats = new baseIndividualStats();
+
 
     string line_string;
     string type;
@@ -134,19 +134,26 @@ void FileHandler::load_roster(Payload *payload, string *roster_name) {
     while (!fileIn.eof()){
         fileIn.getline(single_line, 32);
         line_string = string(single_line);
-
         if(line_string.empty()){
             continue;
         }
         amount = stoi(line_string);
+        fileIn.getline(single_line, 32);
+        line_string = string(single_line);
         for(int i = 0; i < amount; i++){
-            fileIn.getline(single_line, 32);
-            line_string = string(single_line);
-            stats->name = split_string(line_string)->at(1);
+            auto stats = new baseIndividualStats();
+
+            while(line_string == ""){
+                fileIn.getline(single_line, 32);
+                line_string = string(single_line);
+            }
+
+            stats->name = split_string(line_string).at(1);
 
             fileIn.getline(single_line, 32);
             line_string = string(single_line);
             type = line_string;
+            stats->type = type;
 
             fileIn.getline(single_line, 32);
             line_string = string(single_line);
@@ -154,15 +161,15 @@ void FileHandler::load_roster(Payload *payload, string *roster_name) {
 
             fileIn.getline(single_line, 32);
             line_string = string(single_line);
-            stats->life = stoi(split_string(line_string)->at(1));
+            stats->life = stoi(split_string(line_string, " ").at(1));
 
             fileIn.getline(single_line, 32);
             line_string = string(single_line);
-            stats->strength = stoi(split_string(line_string)->at(1));
+            stats->strength = stoi(split_string(line_string).at(1));
 
             fileIn.getline(single_line, 32);
             line_string = string(single_line);
-            stats->intelligence = stoi(split_string(line_string)->at(1));
+            stats->intelligence = stoi(split_string(line_string).at(1));
 
             fileIn.getline(single_line, 32);
             line_string = string(single_line);
@@ -176,14 +183,14 @@ void FileHandler::load_roster(Payload *payload, string *roster_name) {
                 stats->unnatural = (line_string != "Natural");
                 fileIn.getline(single_line, 32);
                 line_string = string(single_line);
-                stats->disquiet = stoi(split_string(line_string)->at(1));
+                stats->disquiet = stoi(split_string(line_string).at(1));
 
 
 
                 if (type == "Eldritch Horror"){
                     fileIn.getline(single_line, 32);
                     line_string = string(single_line);
-                    stats->traumatism = stoi(split_string(line_string)->at(1));
+                    stats->traumatism = stoi(split_string(line_string).at(1));
                     payload->DHEldritch_Horrors->get_data()->push_back(new EldritchHorror(stats, species));
 
                 }
@@ -193,10 +200,10 @@ void FileHandler::load_roster(Payload *payload, string *roster_name) {
 
             }
             else{
-                stats->gender = split_string(line_string)->at(1);
+                stats->gender = split_string(line_string).at(1);
                 fileIn.getline(single_line, 32);
                 line_string = string(single_line);
-                stats->fear = stoi(split_string(line_string)->at(1));
+                stats->fear = stoi(split_string(line_string).at(1));
 
                 auto it = find_if(payload->DHRoles->get_data()->begin(), payload->DHRoles->get_data()->end(),
                                   [&template_name]( Role* obj) {return obj->get_name() == template_name;});
@@ -208,11 +215,14 @@ void FileHandler::load_roster(Payload *payload, string *roster_name) {
                 if(type == "Investigator"){
                     fileIn.getline(single_line, 32);
                     line_string = string(single_line);
-                    stats->terror = stoi(split_string(line_string)->at(1));
-                    payload->DHPersons->get_data()->push_back(new Investigator(stats, role));
+                    stats->terror = stoi(split_string(line_string).at(1));
+                    payload->DHInvestigators->get_data()->push_back(new Investigator(stats, role));
                 }
             }
+            fileIn.getline(single_line, 32);
+            line_string = string(single_line);
         }
+
     }
 
 }

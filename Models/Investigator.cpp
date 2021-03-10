@@ -9,12 +9,14 @@ Investigator::Investigator(std::string* name, std::string* gender, Role* role_te
 Person(name, gender, role_template){
     this->terror = get_random_integer(role_template->get_terror_range());
     this->role_template = role_template;
+    this->set_is_investigator(new bool(true));
 }
 
 Investigator::Investigator(baseIndividualStats *base_stats, Role *base_template)
 :Person(base_stats, base_template) {
     this->terror = base_stats->terror;
     this->role_template = base_template;
+    this->set_is_investigator(new bool(true));
 }
 
 int Investigator::get_terror() {
