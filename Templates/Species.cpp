@@ -41,11 +41,6 @@ void Species::set_traumatism_range(int* traumatism_min, int* traumatism_max){
 }
 
 std::ostream& operator<< (std::ostream& out, Species* Species){
-    if(Species->get_is_eldritch()){
-        out << "Eldritch Horror" << std::endl;
-    } else{
-        out << "Creature" << std::endl;
-    }
     out << (BaseTemplate*)(Species);
 
     if(Species->get_unnatural()){
@@ -54,8 +49,9 @@ std::ostream& operator<< (std::ostream& out, Species* Species){
         out << "Natural" << std::endl;
     }
 
+
     if (Species->is_eldritch_horror){
-        out << "Disquiet: 10" << std::endl;
+        out << "Disquiet: 10-10" << std::endl;
         out << "Traumatism: " << Species->get_traumatism_range() << std::endl;
     }
     else {

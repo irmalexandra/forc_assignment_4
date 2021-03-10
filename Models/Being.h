@@ -2,7 +2,8 @@
 #define FORC_PA_4_BEING_H
 
 #include "iostream"
-
+#include "../Helpers/HelperFunctions.h"
+#include "../Templates/BaseTemplate.h"
 
 class Being {
 public:

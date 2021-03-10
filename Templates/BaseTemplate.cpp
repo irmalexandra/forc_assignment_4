@@ -6,7 +6,7 @@ int UPPER_LIMIT = 10;
 
 BaseTemplate::BaseTemplate(baseStats* base_stats){
     this->name = base_stats->name;
-
+    this->type = base_stats->type;
     this->life_min = base_stats->life_min;
     this->life_max = base_stats->life_max;
     this->intelligence_min = base_stats->int_min;
@@ -46,16 +46,27 @@ void BaseTemplate::set_strength_range(int* strength_min, int* strength_max) {
     this->strength_max = *strength_max;
 }
 
-void BaseTemplate::set_name(std::string name) {
-    this->name = name;
+void BaseTemplate::set_name(std::string* name) {
+    this->name = *name;
 }
+
+
 
 std::ostream& operator<< (std::ostream& out, BaseTemplate* BaseTemplate) {
     out << "Name: " << BaseTemplate->get_name() << std::endl;
+    out << BaseTemplate->get_type() << std::endl;
     out << "Life: " << BaseTemplate->get_life_range() << std::endl;
     out << "Strength: " << BaseTemplate->get_strength_range() << std::endl;
     out << "Intelligence: " << BaseTemplate->get_intelligence_range() << std::endl;
     return out;
+}
+
+void BaseTemplate::set_type(std::string* type) {
+    this->type = *type;
+}
+
+std::string BaseTemplate::get_type() {
+    return this->type;
 }
 
 

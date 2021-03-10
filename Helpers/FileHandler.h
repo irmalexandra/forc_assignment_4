@@ -17,13 +17,10 @@ using namespace std;
 
 class FileHandler {
 public:
-    template<typename T> void write_to_file(T object, std::ostream out){
-        out << object;
-    };
-    void load_data(string file_to_read, InputHandler* input_handler);
-
-    Role* temp_shit();
-    Role* temp_shit2();
+    void load_templates(Payload* payload);
+    void save_templates(Payload* payload);
+    void load_roster(Payload* payload, string* roster_name);
+    void save_roster(Payload* payload, string* roster_name);
 
 };
 

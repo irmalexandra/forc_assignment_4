@@ -1,4 +1,5 @@
 #include "Being.h"
+#include "../Helpers/HelperFunctions.h"
 #include "iostream"
 
 Being::Being(int* life, int* strength, int* intelligence){

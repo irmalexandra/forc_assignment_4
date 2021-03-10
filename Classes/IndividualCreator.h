@@ -8,6 +8,10 @@
 #include "../Models/Person.h"
 #include "../Models/Being.h"
 #include "../Helpers/HelperFunctions.h"
+#include "../Templates/Species.h"
+#include "../Templates/Role.h"
+
+using namespace std;
 
 class IndividualCreator {
 public:
@@ -15,17 +19,17 @@ public:
     IndividualCreator();
     ~IndividualCreator();
 
-    Person* createPerson();
-    Investigator* createInvestigator();
-    Creature* createCreature();
-    EldritchHorror* createEldritchHorror();
+    Person* createPerson(Role* selected_role);
+    Investigator* createInvestigator(Role* selected_role);
+    Creature* createCreature(Species* selected_species);
+    EldritchHorror* createEldritchHorror(Species* selected_species);
+    string* get_individual_name(string template_type, string template_name);
 
 private:
-    std::string* gender_picker();
-    void base_stat_generator();
-
     const int base_stat_count = 3;
     int* base_stats;
+    map<string, int> species_map;
+
 };
 
 #endif //FORC_PA_4_INDIVIDUALCREATOR_H

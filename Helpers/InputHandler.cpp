@@ -1,5 +1,6 @@
 #include "InputHandler.h"
 
+
 bool create_another_character(){
     cout << "Create another? (y/n)" << endl;
     char choice = 'y';
@@ -16,7 +17,17 @@ InputHandler::InputHandler() {
     this->DHEldritchHorrors = new DataHandler<EldritchHorror>;
     this->DHSpecies = new DataHandler<Species>;
     this->DHRoles = new DataHandler<Role>;
-    this->DHRoles->f();
+
+    // Payload
+    this->payload = new Payload(
+            this->DHInvestigators,
+            this->DHPersons,
+            this->DHCreatures,
+            this->DHEldritchHorrors,
+            this->DHSpecies,
+            this->DHRoles);
+
+    this->file_handler->load_templates(this->payload);
 }
 
 InputHandler::~InputHandler() {
@@ -37,15 +48,31 @@ InputHandler::~InputHandler() {
     this->DHRoles = nullptr;
 }
 
-void InputHandler::auto_save(){
-    string filename = "../Resources/data.txt";
-    ofstream fileout(filename, ios::trunc);
-
-    fileout << this->DHSpecies->get_data()->size() << endl;
-    fileout << this->DHSpecies;
-    fileout << "***" << endl;
-    fileout << this->DHRoles->get_data()->size() << endl;
-    fileout << this->DHRoles;
+void InputHandler::main_menu() {
+    int choice;
+    while(true){
+        cout << "1. Templates\n2. Individuals\n3. Save current roster\n4. Load new roster\n5. Quit" << endl;
+        cin >> choice;
+        switch (choice) {
+            case 1:
+                this->template_menu();
+                break;
+            case 2:
+                this->individual_menu();
+                break;
+            case 3:
+                this->file_handler->save_roster(this->payload, new string("../gofuckyourself.txt"));
+                break;
+            case 4:
+                this->file_handler->load_roster(this->payload, new string("../gofuckyourselfagain.txt"));
+                break;
+            case 5:
+                this->file_handler->save_templates(this->payload);
+                return;
+            default:
+                cout << choice << " is not an option" << endl;
+        }
+    }
 }
 
 void InputHandler::create_individual() {
@@ -119,7 +146,6 @@ void InputHandler::create_template() {
                break;
 
        }
-        this->auto_save();
         create_process = create_another_character();
     }
 
@@ -127,13 +153,8 @@ void InputHandler::create_template() {
 
 }
 
-void InputHandler::displayCharacterTypes() {
-    std::cout << "Select a character type" << std::endl;
-    std::cout << "1. Investigator" << std::endl;
-    std::cout << "2. Person (NPC)" << std::endl;
-    std::cout << "3. Creature" << std::endl;
-    std::cout << "4. Eldritch Horror" << std::endl;
-    std::cout << "5. Quit" << std::endl;
+void InputHandler::view_individuals_by_category() {
+
     int choice;
 
     while(true){
@@ -161,69 +182,6 @@ void InputHandler::displayCharacterTypes() {
 
 }
 
-void InputHandler::main_menu() {
-    int choice;
-    while(true){
-        cout << "1. Templates\n2. Individuals\n3. quit" << endl;
-        cin >> choice;
-        switch (choice) {
-            case(1):
-                this->template_menu();
-                break;
-            case(2):
-                this->individual_menu();
-                break;
-            case(3):
-                return;
-            default:
-                cout << choice << " is not an option" << endl;
-        }
-    }
-
-
-}
-
-void InputHandler::template_menu() {
-    int choice;
-    while(true){
-        cout << "1. View templates\n2. Edit templates\n3. Back" << endl;
-        cin >> choice;
-        switch (choice) {
-            case(1):
-                this->view_templates();
-                break;
-            case(2):
-                this->edit_templates();
-                break;
-            case(3):
-                return;
-            default:
-                cout << choice << " is not an option" << endl;
-        }
-    }
-}
-
-void InputHandler::individual_menu() {
-    int choice;
-    cout << "1. View individuals\n2. Create individual\n3. Back" << endl;
-
-    while(true){
-        cin >> choice;
-        switch (choice) {
-            case(1):
-                this->view_individuals();
-                break;
-            case(2):
-                this->create_individual();
-                break;
-            case(3):
-                return;
-            default:
-                cout << choice << " is not an option" << endl;
-        }
-    }
-}
-
 void InputHandler::view_templates() {
     cout << "Available Roles" << endl;
     cout << DHRoles << endl;
@@ -232,23 +190,46 @@ void InputHandler::view_templates() {
 
 }
 
-void InputHandler::edit_templates() {
-    int choice;
-    while(true){
-        cout << "1. Create templates\n2. Delete template\n3. Back" << endl;
-        cin >> choice;
-        switch (choice) {
-            case(1):
-                this->create_template();
-                break;
-            case(2):
-                this->delete_template();
-                break;
-            case(3):
-                return;
-            default:
-                cout << choice << " is not an option" << endl;
-        }
+void InputHandler::view_single_template(int species_index, int role_index){
+
+    if(species_index != -1){
+        cout << this->DHSpecies->get_data()->at(species_index) << endl;
+    }
+
+    else if(role_index != -1){
+        cout << this->DHRoles->get_data()->at(role_index) << endl;
+    }
+}
+
+void InputHandler::view_shortened_templates(){
+    cout << "Available Roles:" << endl;
+    for(const auto role: *this->DHRoles->get_data()){
+        cout << '\t' << role->get_name() << endl;
+    }
+
+    cout << "\nAvailable Species:" << endl;
+    for(const auto species: *this->DHSpecies->get_data()){
+        cout << '\t' << species->get_name() << endl;
+    }
+}
+
+void InputHandler::view_shortened_individuals(){
+    cout << "Individuals:" << endl << endl << "Persons(NPCs)" << endl;
+
+    for(const auto individual: *this->DHPersons->get_data()){
+        cout << '\t' << individual->get_name() << endl;
+    }
+    cout << "Investigators:" << endl;
+    for(const auto individual: *this->DHInvestigators->get_data()){
+        cout << '\t' << individual->get_name() << endl;
+    }
+    cout << "Creatures " << endl;
+    for(const auto individual: *this->DHCreatures->get_data()){
+        cout << '\t' << individual->get_name() << endl;
+    }
+    cout << "Eldritch Horrors" << endl;
+    for(const auto individual: *this->DHEldritchHorrors->get_data()){
+        cout << '\t' << individual->get_name() << endl;
     }
 }
 
@@ -263,8 +244,7 @@ void InputHandler::view_individuals() {
                 this->view_all_individuals();
                 break;
             case(2):
-                this->view_investigators();
-                this->auto_save();
+                this->view_individuals_by_category();
                 break;
             case(3):
                 return;
@@ -274,35 +254,28 @@ void InputHandler::view_individuals() {
     }
 }
 
-void InputHandler::view_all_individuals() {
-    cout << "Created individuals\n" << endl;
-    cout << "Investigators:" << endl;
-    cout << this->DHInvestigators << endl;
-    cout << "\nNPCs:" << endl;
-    cout << this->DHPersons << endl;
-    cout << "\nCreatures:" << endl;
-    cout << this->DHCreatures << endl;
-    cout << "\nEldritch Horrors" << endl;
-    cout << this->DHEldritchHorrors << endl;
-
-}
-
-void InputHandler::view_investigators() {
-    // print only investigators
-}
-
 void InputHandler::delete_template() {
 
 }
 
-void InputHandler::ready_dh_handler() {
-    this->DHRoles->f();
+int InputHandler::get_index_roles(const string& name) const{
+    int index = -1;
+    for (int i = 0; i < this->DHRoles->get_data()->size(); i++){
+        if(this->DHRoles->get_data()->at(i)->get_name() == name){
+            index = i;
+            return index;
+        }
+    }
+    return index;
 }
 
-
-
-
-
-
-
-
+int InputHandler::get_index_species(const string& name) const {
+    int index = -1;
+    for (int i = 0; i < this->DHSpecies->get_data()->size(); i++){
+        if(this->DHSpecies->get_data()->at(i)->get_name() == name){
+            index = i;
+            return index;
+        }
+    }
+    return index;
+}

@@ -15,8 +15,8 @@ class DataHandler {
 public:
     DataHandler(){
         this->data = new std::vector<T*>;
-        f();
     };
+
     ~DataHandler(){
         if (this->data != nullptr){
             this->data->erase(this->data->begin(), this->data->end());
@@ -25,9 +25,7 @@ public:
         }
 
     };
-    void f(){
 
-    }
     std::vector<T*>* get_data(){
         return this->data;
     };

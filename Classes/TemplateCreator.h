@@ -22,7 +22,6 @@ public:
 private:
     void get_base_stats(baseStats* base_stats = nullptr);
     speciesStats* get_species_stats();
-    int get_int_within_range(int lower, int upper, const string& display_string);
 };
 
 

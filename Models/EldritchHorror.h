@@ -11,7 +11,7 @@ public:
     EldritchHorror(const int* traumatism, int* life, int* strength, int* intelligence);
 
     int get_traumatism();
-
+    void edit();
     void set_traumatism(int* traumatism);
 
     friend std::ostream& operator<< (std::ostream& out, EldritchHorror* eldritchHorror);

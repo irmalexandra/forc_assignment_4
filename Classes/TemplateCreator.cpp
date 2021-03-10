@@ -69,19 +69,3 @@ void TemplateCreator::get_base_stats(baseStats* base_stats) {
     base_stats->str_max = get_int_within_range(base_stats->str_min, 10, "Enter upper range for strength: ");
 
 }
-
-int TemplateCreator:: get_int_within_range(int lower, int upper, const string& display_string){
-    int input = -1;
-    while(input <= lower || input > upper){
-        cout << "The range is from " << lower << " to " << upper << endl;
-        cout << display_string;
-        cin >> input;
-        if(input == lower){
-            return input;
-        }
-    }
-    return input;
-
-
- 
-}

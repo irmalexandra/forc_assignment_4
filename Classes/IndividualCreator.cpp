@@ -9,59 +9,38 @@ IndividualCreator::~IndividualCreator() {
     this->base_stats = nullptr;
 }
 
-std::string *IndividualCreator::gender_picker() {
-    int choice;
-    std::cout << "Pick a gender:\n1. Male\n2. Female\n3. Other"<< std::endl;
-    enum Gender { Male = 1, Female = 2, Other = 3};
-    while(true){
-        std::cin >> choice;
-        switch (choice) {
-            case Male:
-                return new std::string("Male");
-            case Female:
-                return new std::string("Female");
-            case Other:
-                return new std::string("Other");
-            default:
-                std::cout << choice << " is not a valid option";
-        }
-    }
+
+
+
+Person *IndividualCreator::createPerson(Role* selected_role) {
+    return new Person(
+            this->get_individual_name(selected_role->get_type(), selected_role->get_name())
+            , gender_picker()
+            , selected_role);
 }
 
-void IndividualCreator::base_stat_generator(){
-
-    for (int i = 0; i < IndividualCreator::base_stat_count; i++){
-        base_stats[i] = int(rand() % 10);
-    }
+Investigator *IndividualCreator::createInvestigator(Role* selected_role) {
+    return new Investigator(
+            this->get_individual_name(selected_role->get_type(), selected_role->get_name())
+            , gender_picker()
+            , selected_role);
 }
 
-Person *IndividualCreator::createPerson() {
-    IndividualCreator::base_stat_generator();
-    std::string* gender = gender_picker();
-    int fear = rand() % 10;
-    return new Person(gender, &fear, &base_stats[0], &base_stats[1], &base_stats[2]);
+Creature *IndividualCreator::createCreature(Species* selected_species) {
+    return new Creature(
+            this->get_individual_name(selected_species->get_type(), selected_species->get_name()),
+            selected_species);
 }
 
-Investigator *IndividualCreator::createInvestigator() {
-    base_stat_generator();
-    std::string* gender = gender_picker();
-    int fear = rand() % 10;
-    int terror = rand() % 3;
-    return new Investigator(&terror, gender, &fear, &base_stats[0], &base_stats[1], &base_stats[2]);
+EldritchHorror *IndividualCreator::createEldritchHorror(Species* selected_species) {
+    return new EldritchHorror(
+            this->get_individual_name(selected_species->get_type(), selected_species->get_name()),
+            selected_species);
 }
 
-Creature *IndividualCreator::createCreature() {
-    base_stat_generator();
-    bool unnatural = (bool)(rand() % 1);
-    int disquiet = rand() % 10;
-    return new Creature(&unnatural, &disquiet, &base_stats[0], &base_stats[1], &base_stats[2]);
-}
 
-EldritchHorror *IndividualCreator::createEldritchHorror() {
-    base_stat_generator();
-    int traumatism = rand() % 3;
-    return new EldritchHorror(&traumatism, &base_stats[0], &base_stats[1], &base_stats[2]);
-}
+
+
 
 
 

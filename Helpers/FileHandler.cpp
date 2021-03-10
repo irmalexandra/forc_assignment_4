@@ -1,38 +1,9 @@
+#include <algorithm>
 #include "FileHandler.h"
 
-Role* FileHandler::temp_shit(){
-    auto stats = new speciesStats();
-    stats->name = "temphshit1";
-    stats->life_min = 3;
-    stats->life_max = 4;
-    stats->str_max = 5;
-    stats->str_min = 1;
-    stats->int_min = 1;
-    stats->int_max = 6;
-    Role* my_role = new Role((baseStats*) stats);
-//    auto thinggy = new DataHandler<Role>;
-//    thinggy->get_data()->push_back(my_role);
-//    thing->DHRoles = thinggy;
-    return my_role;
-}
-Role* FileHandler::temp_shit2(){
-    auto stats = new speciesStats();
-    stats->name = "tempshit2_thing";
-    stats->life_min = 6;
-    stats->life_max = 9;
-    stats->str_max = 1;
-    stats->str_min = 1;
-    stats->int_min = 1;
-    stats->int_max = 6;
-    Role* my_role = new Role((baseStats*) stats);
-//    auto thinggy = new DataHandler<Role>;
-//    thinggy->get_data()->push_back(my_role);
-//    thing->DHRoles = thinggy;
-    return my_role;
-}
 
 
-void FileHandler::load_data(string file_to_read, InputHandler* input_handler){
+void FileHandler::load_templates(Payload* payload){
     char single_line[32] = {};
     auto thing = new vector<BaseTemplate>;
 
@@ -40,14 +11,9 @@ void FileHandler::load_data(string file_to_read, InputHandler* input_handler){
 
     string name;
     string type;
-    //auto life_range = Range();
-    //auto strength_range = Range();
-    //auto intelligence_range = Range();
+
 
     auto temp_string_array = new std::vector<std::string>;
-    //bool natural;
-    //auto disquiet_range = Range();
-    //auto traumatism_range = Range();
     int amount;
 
     string line_str;
@@ -55,8 +21,14 @@ void FileHandler::load_data(string file_to_read, InputHandler* input_handler){
     while (!fileIn.eof()){
         fileIn.getline(single_line, 32);
         line_str = string(single_line);
+
+        if(line_str.empty()){
+            continue;
+        }
         amount = stoi(line_str);
         for(int i = 0; i < amount; i++){
+
+
             stats = new speciesStats();
             fileIn.getline(single_line, 32);
             line_str = string(single_line);
@@ -118,4 +90,92 @@ void FileHandler::load_data(string file_to_read, InputHandler* input_handler){
             delete stats;
         }
     }
+}
+
+void FileHandler::save_templates(Payload* payload) {
+    string filename = "../Resources/template_file.txt";
+    ofstream fileout(filename, ios::trunc);
+
+    fileout << payload->DHSpecies->get_data()->size() << endl;
+    fileout << payload->DHSpecies;
+    fileout << payload->DHRoles->get_data()->size() << endl;
+    fileout << payload->DHRoles;
+    fileout.close();
+}
+
+void FileHandler::save_roster(Payload* payload, string* roster_name){
+    ofstream fileout(*roster_name, ios::trunc);
+
+    fileout << payload->DHInvestigators->get_data()->size() << endl;
+    fileout << payload->DHInvestigators;
+    fileout << payload->DHPersons->get_data()->size() << endl;
+    fileout << payload->DHPersons;
+    fileout << payload->DHCreatures->get_data()->size() << endl;
+    fileout << payload->DHCreatures;
+    fileout << payload->DHEldritch_Horrors->get_data()->size() << endl;
+    fileout << payload->DHEldritch_Horrors;
+    fileout.close();
+}
+
+void FileHandler::load_roster(Payload *payload, string *roster_name) {
+    char single_line[32] = {};
+    ifstream fileIn (*roster_name);
+    baseIndividualStats* stats;
+
+    string line_string;
+    string type;
+    string template_name;
+
+
+    int amount;
+    while (!fileIn.eof()){
+        fileIn.getline(single_line, 32);
+        line_string = string(single_line);
+
+        if(line_string.empty()){
+            continue;
+        }
+        amount = stoi(line_string);
+        for(int i = 0; i < amount; i++){
+            fileIn.getline(single_line, 32);
+            line_string = string(single_line);
+            stats->name = line_string;
+
+            fileIn.getline(single_line, 32);
+            line_string = string(single_line);
+            type = line_string;
+
+            fileIn.getline(single_line, 32);
+            line_string = string(single_line);
+            template_name = split_string(line_string)->at(1);
+
+            fileIn.getline(single_line, 32);
+            line_string = string(single_line);
+            stats->life = stoi(split_string(line_string)->at(1));
+
+            fileIn.getline(single_line, 32);
+            line_string = string(single_line);
+            stats->strength = stoi(split_string(line_string)->at(1));
+
+            fileIn.getline(single_line, 32);
+            line_string = string(single_line);
+            stats->intelligence = stoi(split_string(line_string)->at(1));
+
+            fileIn.getline(single_line, 32);
+            line_string = string(single_line);
+            if(type == "Creature"){
+                // IMPLEMENT TEMPLATE LOOKUP
+                auto it = find_if(payload->DHSpecies->get_data()->begin(), payload->DHSpecies->get_data()->end(), [&template_name]( Species* obj) {return obj->get_name() == template_name;});
+
+                auto index = std::distance(payload->DHSpecies->get_data()->begin(), it);
+
+                auto species = payload->DHSpecies->get_data()->at(index);
+
+                payload->DHCreatures->get_data()->push_back(new Creature(stats, species));
+            }
+
+
+        }
+    }
+
 }
