@@ -1,0 +1,22 @@
+0
+0
+2
+Name: Wolfie
+Creature
+Wolf
+Life: 4
+Strength: 6
+Intelligence: 5
+Natural
+Disquiet: 2
+
+Name: Wolf2
+Creature
+Wolf
+Life: 4
+Strength: 6
+Intelligence: 5
+Natural
+Disquiet: 2
+
+0
