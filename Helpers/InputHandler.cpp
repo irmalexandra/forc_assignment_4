@@ -50,6 +50,7 @@ InputHandler::~InputHandler() {
     delete this->DHPersons;
     delete this->DHSpecies;
     delete this->DHRoles;
+    delete this->species_map;
     delete this->file_handler;
     delete this->payload;
 
@@ -60,6 +61,7 @@ InputHandler::~InputHandler() {
     this->DHEldritchHorrors = nullptr;
     this->DHSpecies = nullptr;
     this->DHRoles = nullptr;
+    this->species_map = nullptr;
     this->file_handler = nullptr;
     this->payload = nullptr;
 }
