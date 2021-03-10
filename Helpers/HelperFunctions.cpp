@@ -2,22 +2,39 @@
 
 
 
-std::vector<std::string>* split_string(std::string string_in, char delim){
-    auto* ret_str = new std::vector<std::string>;
-    if (string_in.length() < 1) return ret_str;
-    std::string temp_string = "";
-    for (auto i : string_in){
-        if (i == delim){
-            ret_str->push_back(temp_string);
-            temp_string = "";
-        }
-        else{
-            temp_string.push_back(i);
+//std::vector<std::string>* split_string(std::string string_in, char delim){
+//    auto* ret_str = new std::vector<std::string>;
+//    if (string_in.length() < 1) return ret_str;
+//    std::string temp_string = "";
+//    for (auto i : string_in){
+//        if (i == delim){
+//            ret_str->push_back(temp_string);
+//            temp_string = "";
+//        }
+//        else{
+//            temp_string.push_back(i);
+//        }
+//    }
+//    ret_str->push_back(temp_string);
+//    return ret_str;
+//}
+
+vector<string> split_string(string str, string token){
+    vector<string>result;
+    while(str.size()){
+        int index = str.find(token);
+        if(index!=string::npos){
+            result.push_back(str.substr(0,index));
+            str = str.substr(index+token.size());
+            if(str.size()==0)result.push_back(str);
+        }else{
+            result.push_back(str);
+            str = "";
         }
     }
-    ret_str->push_back(temp_string);
-    return ret_str;
+    return result;
 }
+
 
 int get_random_integer(const Range& range) {
     if(range.min == range.max){
