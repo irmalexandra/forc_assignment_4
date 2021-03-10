@@ -106,15 +106,20 @@ void FileHandler::save_templates(Payload* payload) {
 }
 
 void FileHandler::save_roster(Payload* payload, string* roster_name){
+    int amount = 0;
+    amount += payload->DHInvestigators->get_data()->size();
+    amount += payload->DHPersons->get_data()->size();
+    amount += payload->DHCreatures->get_data()->size();
+    amount += payload->DHEldritch_Horrors->get_data()->size();
     ofstream fileout(*roster_name, ios::trunc);
-
-    fileout << payload->DHInvestigators->get_data()->size() << endl;
+    fileout << amount << endl;
+//    fileout << payload->DHInvestigators->get_data()->size() << endl;
     fileout << payload->DHInvestigators;
-    fileout << payload->DHPersons->get_data()->size() << endl;
+//    fileout << payload->DHPersons->get_data()->size() << endl;
     fileout << payload->DHPersons;
-    fileout << payload->DHCreatures->get_data()->size() << endl;
+//    fileout << payload->DHCreatures->get_data()->size() << endl;
     fileout << payload->DHCreatures;
-    fileout << payload->DHEldritch_Horrors->get_data()->size() << endl;
+//    fileout << payload->DHEldritch_Horrors->get_data()->size() << endl;
     fileout << payload->DHEldritch_Horrors;
     fileout.close();
 }
@@ -123,102 +128,106 @@ void FileHandler::load_roster(Payload *payload, string *roster_name) {
     char single_line[32] = {};
     cout << *roster_name << endl;
     ifstream fileIn (*roster_name);
-
+    if(fileIn.fail()){
+        cout << "no good" << endl;
+        return;
+    }
 
     string line_string;
     string type;
     string template_name;
 
+    fileIn.getline(single_line, 32);
+    line_string = string(single_line);
 
-    int amount;
-    while (!fileIn.eof()){
+    int amount = stoi(line_string);
+
+    for (int i = 0; i < amount; i++){
         fileIn.getline(single_line, 32);
         line_string = string(single_line);
         if(line_string.empty()){
-            continue;
+            fileIn.getline(single_line, 32);
+            line_string = string(single_line);
         }
-        amount = stoi(line_string);
+
+        auto stats = new baseIndividualStats();
+
+        while(line_string == ""){
+            fileIn.getline(single_line, 32);
+            line_string = string(single_line);
+        }
+
+        stats->name = split_string(line_string).at(1);
+
         fileIn.getline(single_line, 32);
         line_string = string(single_line);
-        for(int i = 0; i < amount; i++){
-            auto stats = new baseIndividualStats();
+        type = line_string;
+        stats->type = type;
 
-            while(line_string == ""){
+        fileIn.getline(single_line, 32);
+        line_string = string(single_line);
+        template_name = line_string;
+
+        fileIn.getline(single_line, 32);
+        line_string = string(single_line);
+        stats->life = stoi(split_string(line_string, " ").at(1));
+
+        fileIn.getline(single_line, 32);
+        line_string = string(single_line);
+        stats->strength = stoi(split_string(line_string).at(1));
+
+        fileIn.getline(single_line, 32);
+        line_string = string(single_line);
+        stats->intelligence = stoi(split_string(line_string).at(1));
+
+        fileIn.getline(single_line, 32);
+        line_string = string(single_line);
+        if(type == "Creature" || type == "Eldritch Horror"){
+            auto it = find_if(payload->DHSpecies->get_data()->begin(), payload->DHSpecies->get_data()->end(),
+                              [&template_name]( Species* obj) {return obj->get_name() == template_name;});
+            auto index = std::distance(payload->DHSpecies->get_data()->begin(), it);
+            auto species = payload->DHSpecies->get_data()->at(index);
+
+            // IMPLEMENT TEMPLATE LOOKUP
+            stats->unnatural = (line_string != "Natural");
+            fileIn.getline(single_line, 32);
+            line_string = string(single_line);
+            stats->disquiet = stoi(split_string(line_string).at(1));
+
+
+
+            if (type == "Eldritch Horror"){
                 fileIn.getline(single_line, 32);
                 line_string = string(single_line);
-            }
-
-            stats->name = split_string(line_string).at(1);
-
-            fileIn.getline(single_line, 32);
-            line_string = string(single_line);
-            type = line_string;
-            stats->type = type;
-
-            fileIn.getline(single_line, 32);
-            line_string = string(single_line);
-            template_name = line_string;
-
-            fileIn.getline(single_line, 32);
-            line_string = string(single_line);
-            stats->life = stoi(split_string(line_string, " ").at(1));
-
-            fileIn.getline(single_line, 32);
-            line_string = string(single_line);
-            stats->strength = stoi(split_string(line_string).at(1));
-
-            fileIn.getline(single_line, 32);
-            line_string = string(single_line);
-            stats->intelligence = stoi(split_string(line_string).at(1));
-
-            fileIn.getline(single_line, 32);
-            line_string = string(single_line);
-            if(type == "Creature" || type == "Eldritch Horror"){
-                auto it = find_if(payload->DHSpecies->get_data()->begin(), payload->DHSpecies->get_data()->end(),
-                                  [&template_name]( Species* obj) {return obj->get_name() == template_name;});
-                auto index = std::distance(payload->DHSpecies->get_data()->begin(), it);
-                auto species = payload->DHSpecies->get_data()->at(index);
-
-                // IMPLEMENT TEMPLATE LOOKUP
-                stats->unnatural = (line_string != "Natural");
-                fileIn.getline(single_line, 32);
-                line_string = string(single_line);
-                stats->disquiet = stoi(split_string(line_string).at(1));
-
-
-
-                if (type == "Eldritch Horror"){
-                    fileIn.getline(single_line, 32);
-                    line_string = string(single_line);
-                    stats->traumatism = stoi(split_string(line_string).at(1));
-                    payload->DHEldritch_Horrors->get_data()->push_back(new EldritchHorror(stats, species));
-
-                }
-                else{
-                    payload->DHCreatures->get_data()->push_back(new Creature(stats, species));
-                }
+                stats->traumatism = stoi(split_string(line_string).at(1));
+                payload->DHEldritch_Horrors->get_data()->push_back(new EldritchHorror(stats, species));
 
             }
             else{
-                stats->gender = split_string(line_string).at(1);
+                payload->DHCreatures->get_data()->push_back(new Creature(stats, species));
+            }
+
+        }
+        else{
+            stats->gender = split_string(line_string).at(1);
+            fileIn.getline(single_line, 32);
+            line_string = string(single_line);
+            stats->fear = stoi(split_string(line_string).at(1));
+
+            auto it = find_if(payload->DHRoles->get_data()->begin(), payload->DHRoles->get_data()->end(),
+                              [&template_name]( Role* obj) {return obj->get_name() == template_name;});
+            auto index = std::distance(payload->DHRoles->get_data()->begin(), it);
+            auto role = payload->DHRoles->get_data()->at(index);
+            if(type == "Person"){
+                payload->DHPersons->get_data()->push_back(new Person(stats, role));
+            }
+            if(type == "Investigator"){
                 fileIn.getline(single_line, 32);
                 line_string = string(single_line);
-                stats->fear = stoi(split_string(line_string).at(1));
-
-                auto it = find_if(payload->DHRoles->get_data()->begin(), payload->DHRoles->get_data()->end(),
-                                  [&template_name]( Role* obj) {return obj->get_name() == template_name;});
-                auto index = std::distance(payload->DHRoles->get_data()->begin(), it);
-                auto role = payload->DHRoles->get_data()->at(index);
-                if(type == "Person"){
-                    payload->DHPersons->get_data()->push_back(new Person(stats, role));
-                }
-                if(type == "Investigator"){
-                    fileIn.getline(single_line, 32);
-                    line_string = string(single_line);
-                    stats->terror = stoi(split_string(line_string).at(1));
-                    payload->DHInvestigators->get_data()->push_back(new Investigator(stats, role));
-                }
+                stats->terror = stoi(split_string(line_string).at(1));
+                payload->DHInvestigators->get_data()->push_back(new Investigator(stats, role));
             }
+
             fileIn.getline(single_line, 32);
             line_string = string(single_line);
         }
