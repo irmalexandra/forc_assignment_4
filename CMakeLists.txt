@@ -31,4 +31,4 @@ add_executable(FORC_PA_4 main.cpp
         Templates/Species.h
         Templates/Role.cpp
         Templates/Role.h
-        Helpers/Database.cpp Helpers/Database.h)
+        )

@@ -6,6 +6,7 @@
 #include <fstream>
 #include <cstring>
 #include <iostream>
+#include <map>
 
 #include "../Templates/BaseTemplate.h"
 #include "../Templates/Role.h"
@@ -23,13 +24,18 @@ struct Payload {
             DataHandler<Creature>* dh_creatures,
             DataHandler<EldritchHorror>* dh_eldritch_horrors,
             DataHandler<Species>* dh_species,
-            DataHandler<Role>* dh_roles){
+            DataHandler<Role>* dh_roles,
+            map<string, int>* species_map)
+
+            {
         this->DHInvestigators = dh_investigators;
         this->DHPersons = dh_persons;
         this->DHCreatures = dh_creatures;
         this->DHEldritch_Horrors = dh_eldritch_horrors;
         this->DHSpecies = dh_species;
         this->DHRoles = dh_roles;
+        this->species_map = species_map;
+
     }
 
     // ROSTER
@@ -41,6 +47,9 @@ struct Payload {
     // Templates
     DataHandler<Species>* DHSpecies;
     DataHandler<Role>* DHRoles;
+
+    // Species Map
+    map<string, int>* species_map;
 };
 
 class FileHandler {

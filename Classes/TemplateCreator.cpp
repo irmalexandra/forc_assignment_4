@@ -5,35 +5,47 @@ speciesStats* TemplateCreator::get_species_stats(){
     get_base_stats(species_stats);
     char choice = 'n';
 
-    cout << "Is this a Eldritch Horror? (y/n)" << endl;
-    cin >> choice;
-    switch (choice) {
-        case 'y':
-            species_stats->type = "Eldritch Horror";
-            species_stats->is_eldritch = true;
 
-            species_stats->unnatural = true;
-            species_stats->dis_min = 10;
-            species_stats->dis_max = 10;
-            species_stats->trauma_min = get_int_within_range(0, 3, "Enter lower range for traumatism: ");
-            species_stats->trauma_max = get_int_within_range(species_stats->trauma_min, 3, "Enter upper range for traumatism: ");
-            break;
-        case 'n':
-            species_stats->type = "Creature";
-            species_stats->is_eldritch = false;
 
-            cout << "Unnatural? (y/n)" << endl;
-            cin >> choice;
-            species_stats->unnatural = choice == 'y';
-
-            species_stats->dis_min = get_int_within_range(0, 10, "Enter lower range for disquiet: ");
-            species_stats->dis_max = get_int_within_range(species_stats->dis_min, 10, "Enter upper range for disquiet: ");
-
-            break;
-        default:
+    while(true){
+        cout << "Is this a Eldritch Horror? (y/n)" << endl;
+        cin >> choice;
+        if(cin.fail()){
             cout << "Invalid input" << endl;
+            cin.clear();
+            cin.ignore(std::numeric_limits<int>::max(),'\n');
+            continue;
+        }
+        switch (choice) {
+            case 'y':
+                species_stats->type = "Eldritch Horror";
+                species_stats->is_eldritch = true;
+
+                species_stats->unnatural = true;
+                species_stats->dis_min = 10;
+                species_stats->dis_max = 10;
+                species_stats->trauma_min = get_int_within_range(0, 3, "Enter lower range for traumatism: ");
+                species_stats->trauma_max = get_int_within_range(species_stats->trauma_min, 3, "Enter upper range for traumatism: ");
+                return species_stats;
+            case 'n':
+                species_stats->type = "Creature";
+                species_stats->is_eldritch = false;
+
+                cout << "Unnatural? (y/n)" << endl;
+                cin >> choice;
+                species_stats->unnatural = choice == 'y';
+
+                species_stats->dis_min = get_int_within_range(0, 10, "Enter lower range for disquiet: ");
+                species_stats->dis_max = get_int_within_range(species_stats->dis_min, 10, "Enter upper range for disquiet: ");
+                return species_stats;
+
+            default:
+                cout << "Invalid input" << endl;
+                break;
+
+        }
     }
-    return species_stats;
+
 }
 
 
@@ -51,16 +63,14 @@ Role *TemplateCreator::create_role() {
 }
 
 
-
-
 void TemplateCreator::get_base_stats(baseStats* base_stats) {
     if (base_stats == nullptr){
        auto base_stats = new baseStats();
     }
-    int input;
 
     cout << "Enter name (no spaces): ";
     cin >> base_stats->name;
+
 
     base_stats->life_min = get_int_within_range(0, 10, "Enter lower range for life: ");
     base_stats->life_max = get_int_within_range(base_stats->life_min, 10, "Enter upper range for life: ");

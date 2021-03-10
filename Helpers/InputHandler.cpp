@@ -24,6 +24,10 @@ InputHandler::InputHandler() {
     this->DHSpecies = new DataHandler<Species>;
     this->DHRoles = new DataHandler<Role>;
 
+    // Species Map
+    this->species_map = new map<string, int>;
+
+
     // Payload
     this->payload = new Payload(
             this->DHInvestigators,
@@ -31,7 +35,9 @@ InputHandler::InputHandler() {
             this->DHCreatures,
             this->DHEldritchHorrors,
             this->DHSpecies,
-            this->DHRoles);
+            this->DHRoles,
+            this->species_map
+            );
 
     this->file_handler->load_templates(this->payload);
 }
@@ -64,6 +70,13 @@ void InputHandler::main_menu() {
     while(true){
         cout << "1. Templates\n2. Individuals\n3. Save current roster\n4. Load new roster\n5. Quit" << endl;
         cin >> choice;
+        if(cin.fail()){
+            cout << "Invalid input" << endl;
+            cin.clear();
+            cin.ignore(std::numeric_limits<int>::max(),'\n');
+            continue;
+        }
+
         switch (choice) {
             case 1:
                 this->template_menu();
@@ -86,6 +99,9 @@ void InputHandler::main_menu() {
                 return;
             default:
                 cout << choice << " is not an option" << endl;
+                break;
+
+
         }
     }
 }
@@ -95,6 +111,12 @@ void InputHandler::template_menu() {
     while(true){
         cout << "1. View templates\n2. Edit templates\n3. Back" << endl;
         cin >> choice;
+        if(cin.fail()){
+            cout << "Invalid input" << endl;
+            cin.clear();
+            cin.ignore(std::numeric_limits<int>::max(),'\n');
+            continue;
+        }
         switch (choice) {
             case(1):
                 this->view_templates();
@@ -106,6 +128,7 @@ void InputHandler::template_menu() {
                 return;
             default:
                 cout << choice << " is not an option" << endl;
+                break;
         }
     }
 }
@@ -115,6 +138,12 @@ void InputHandler::individual_menu() {
     while(true){
         cout << "1. View individuals\n2. Create individual\n3. Back" << endl;
         cin >> choice;
+        if(cin.fail()){
+            cout << "Invalid input" << endl;
+            cin.clear();
+            cin.ignore(std::numeric_limits<int>::max(),'\n');
+            continue;
+        }
         switch (choice) {
             case(1):
                 this->view_individuals();
@@ -126,6 +155,7 @@ void InputHandler::individual_menu() {
                 return;
             default:
                 cout << choice << " is not an option" << endl;
+                break;
         }
     }
 }
@@ -137,66 +167,150 @@ void InputHandler::select_template_for_individual() {
     cin >> name;
     auto species_index = this->get_index_species(name);
     auto role_index = this->get_index_roles(name);
-    if (role_index == -1 && species_index == -1) {
+    while(role_index == -1 && species_index == -1) {
         cout << name << " does not exist!" << endl;
-    } else {
-        this->view_single_template(species_index, role_index);
+        this->view_shortened_templates();
+        cout << "Enter the name of the template you want to view." << endl;
+        cin >> name;
+        species_index = this->get_index_species(name);
+        role_index = this->get_index_roles(name);
     }
-    cout << "1. Create Individual based on this template\n2. Return" << endl;
+    this->view_single_template(species_index, role_index);
+
+    cout << "1. Create Individual based on this template\n2. Back" << endl;
     int choice = 0;
     cin >> choice;
+    if(cin.fail()){
+        cout << "Invalid input, going back" << endl;
+        cin.clear();
+        cin.ignore(std::numeric_limits<int>::max(),'\n');
+        return;
+    }
     switch (choice) {
         case 1:
             if (species_index >= 0) {
                 auto species = this->DHSpecies->get_data()->at(species_index);
                 if (species->get_is_eldritch()){
                     auto new_eldritch_horror = individual_creator->createEldritchHorror(species);
+                    if(this->species_map->find(new_eldritch_horror->get_template()->get_name()) == this->species_map->end()){
+                        this->species_map->insert(std::pair<string, int>(new_eldritch_horror->get_template()->get_name(), 0));
+                    }
+                    new_eldritch_horror->set_name(new string(new_eldritch_horror->get_name() +
+                        to_string(++this->species_map->find(new_eldritch_horror->get_template()->get_name())->second)));
+
                     new_eldritch_horror->set_is_investigator(new bool(false));
                     this->DHEldritchHorrors->get_data()->push_back(new_eldritch_horror);
                     cout << new_eldritch_horror << endl << "Do you wish to edit this individual?\n1. yes\n2. no" << endl;
+                    string original_name = new_eldritch_horror->get_name();
                     cin >> choice;
+                    while(cin.fail()){
+                        cout << "Invalid input" << endl;
+                        cin.clear();
+                        cin.ignore(std::numeric_limits<int>::max(),'\n');
+                        cout << new_eldritch_horror << endl << "Do you wish to edit this individual?\n1. yes\n2. no" << endl;
+                        cin >> choice;
+                    }
                     if(choice == 1){
                         new_eldritch_horror->edit();
+                        if(original_name != new_eldritch_horror->get_name()){
+                            this->species_map->find(new_eldritch_horror->get_template()->get_name())->second--;
+
+                        }
                     }
                 }
                 else {
                     auto new_creature = individual_creator->createCreature(species);
                     new_creature->set_is_investigator(new bool(false));
+                    if(this->species_map->find(new_creature->get_template()->get_name()) == this->species_map->end()){
+                        this->species_map->insert(std::pair<string, int>(new_creature->get_template()->get_name(), 0));
+                    }
+                    new_creature->set_name(new string(new_creature->get_name()
+                        + to_string(++this->species_map->find(new_creature->get_template()->get_name())->second)));
                     this->DHCreatures->get_data()->push_back(new_creature);
                     cout << new_creature << endl << "Do you wish to edit this individual?\n1. yes\n2. no" << endl;
+                    string original_name = new_creature->get_name();
                     cin >> choice;
+                    while(cin.fail()){
+                        cout << "Invalid input" << endl;
+                        cin.clear();
+                        cin.ignore(std::numeric_limits<int>::max(),'\n');
+                        cout << new_creature << endl << "Do you wish to edit this individual?\n1. yes\n2. no" << endl;
+                        cin >> choice;
+                    }
                     if(choice == 1){
                         new_creature->edit();
+                        if(original_name != new_creature->get_name()){
+                            this->species_map->find(new_creature->get_template()->get_name())->second--;
+                        }
                     }
                 }
 
             } else if (role_index >= 0) {
                 auto role = this->DHRoles->get_data()->at(role_index);
                 cout << "1. Investigator (playable character)\n2. Person (NPC)\n3. Return" << endl;
+                bool runner = true;
                 cin >> choice;
-                if (choice == 1){
-                    auto new_investigator = individual_creator->createInvestigator(role);
-                    new_investigator->set_is_investigator(new bool(true));
-                    this->DHInvestigators->get_data()->push_back(new_investigator);
-                    cout << new_investigator << endl << "Do you wish to edit this individual?\n1. yes\n2. no" << endl;
+                while(cin.fail()){
+                    cout << "Invalid input" << endl;
+                    cin.clear();
+                    cin.ignore(std::numeric_limits<int>::max(),'\n');
+                    cout << "1. Investigator (playable character)\n2. Person (NPC)\n3. Return" << endl;
                     cin >> choice;
-                    if(choice == 1){
-                        new_investigator->edit();
-                    }
-                    auto_save();
+                }
+                while(runner){
+                    if (choice == 1){
+                        auto new_investigator = individual_creator->createInvestigator(role);
+                        new_investigator->set_is_investigator(new bool(true));
+                        this->DHInvestigators->get_data()->push_back(new_investigator);
+                        cout << new_investigator << endl << "Do you wish to edit this individual?\n1. yes\n2. no" << endl;
+                        cin >> choice;
+                        while(cin.fail()){
+                            cout << "Invalid input" << endl;
+                            cin.clear();
+                            cin.ignore(std::numeric_limits<int>::max(),'\n');
+                            cout << new_investigator << endl << "Do you wish to edit this individual?\n1. yes\n2. no" << endl;
+                            cin >> choice;
+                        }
+                        if(choice == 1){
+                            new_investigator->edit();
+                        }
+                        auto_save();
+                        runner = false;
 
-                }
-                else if (choice == 2){
-                    auto new_person = individual_creator->createPerson(role);
-                    new_person->set_is_investigator(new bool(false));
-                    this->DHPersons->get_data()->push_back(new_person);
-                    cout << new_person << endl << "Do you wish to edit this individual?\n1. yes\n2. no" << endl;
-                    cin >> choice;
-                    if(choice == 1){
-                        new_person->edit();
                     }
-                    auto_save();
+                    else if (choice == 2){
+                        auto new_person = individual_creator->createPerson(role);
+                        new_person->set_is_investigator(new bool(false));
+                        this->DHPersons->get_data()->push_back(new_person);
+                        cout << new_person << endl << "Do you wish to edit this individual?\n1. yes\n2. no" << endl;
+                        cin >> choice;
+                        while(cin.fail()){
+                            cout << "Invalid input" << endl;
+                            cin.clear();
+                            cin.ignore(std::numeric_limits<int>::max(),'\n');
+                            cout << new_person << endl << "Do you wish to edit this individual?\n1. yes\n2. no" << endl;
+                            cin >> choice;
+                        }
+                        if(choice == 1){
+                            new_person->edit();
+                        }
+                        auto_save();
+                        runner = false;
+                    }
+                    else{
+                        cout << choice << " is not a valid option" << endl;
+                        cout << "1. Investigator (playable character)\n2. Person (NPC)\n3. Return" << endl;
+                        cin >> choice;
+                        while(cin.fail()){
+                            cout << "Invalid input" << endl;
+                            cin.clear();
+                            cin.ignore(std::numeric_limits<int>::max(),'\n');
+                            cout << "1. Investigator (playable character)\n2. Person (NPC)\n3. Return" << endl;
+                            cin >> choice;
+                        }
+                    }
                 }
+
             }
         case 2:
             return;
@@ -206,17 +320,22 @@ void InputHandler::select_template_for_individual() {
 
 void InputHandler::create_template() {
     int choice = 0;
-    bool create_process = true;
 
     Species* species;
     Role* role;
 
 
-    while(create_process){
+    while(true){
         std::cout << "Select:" << std::endl;
         std::cout << "1. Species" << std::endl;
         std::cout << "2. Role" << std::endl;
        cin >> choice;
+        if(cin.fail()){
+            cout << "Invalid input" << endl;
+            cin.clear();
+            cin.ignore(std::numeric_limits<int>::max(),'\n');
+            continue;
+        }
        switch (choice) {
            case 1:
                species = this->template_creator->create_species();
@@ -231,7 +350,9 @@ void InputHandler::create_template() {
                break;
 
        }
-        create_process = create_another_character();
+        if(!create_another_character()){
+            return;
+        }
     }
 }
 
@@ -247,6 +368,12 @@ void InputHandler::view_individuals_by_category() {
         cout << "4. Eldritch Horror" << endl;
         cout << "5. Back" << std::endl;
         cin >> choice;
+        if(cin.fail()){
+            cout << "Invalid input" << endl;
+            cin.clear();
+            cin.ignore(std::numeric_limits<int>::max(),'\n');
+            continue;
+        }
         switch(choice){
             case 1:
                 cout << this->DHInvestigators << endl;
@@ -264,6 +391,8 @@ void InputHandler::view_individuals_by_category() {
                 return;
             default:
                 cout<<"Error"<<endl;
+                break;
+
         }
     }
 }
@@ -336,6 +465,12 @@ void InputHandler::view_individuals() {
     while(true){
         cout << "1. View all individuals\n2. View by category\n3. Back" << endl;
         cin >> choice;
+        if(cin.fail()){
+            cout << "Invalid input" << endl;
+            cin.clear();
+            cin.ignore(std::numeric_limits<int>::max(),'\n');
+            continue;
+        }
         switch (choice) {
             case(1):
                 this->view_all_individuals();
@@ -347,6 +482,8 @@ void InputHandler::view_individuals() {
                 return;
             default:
                 cout << choice << " is not an option" << endl;
+                break;
+
         }
     }
 }
@@ -356,6 +493,7 @@ void InputHandler::delete_template(){
     this->view_shortened_templates();
     cout << "Enter the name of the template you want deleted." << endl;
     cin >> name;
+
     auto species_index = this->get_index_species(name);
     auto role_index = this->get_index_roles(name);
     if(role_index == -1 && species_index == -1){
@@ -377,6 +515,12 @@ void InputHandler::edit_templates() {
     while(true){
         cout << "1. Create templates\n2. Delete template\n3. Back" << endl;
         cin >> choice;
+        if(cin.fail()){
+            cout << "Invalid input" << endl;
+            cin.clear();
+            cin.ignore(std::numeric_limits<int>::max(),'\n');
+            continue;
+        }
         switch (choice) {
             case(1):
                 this->create_template();
@@ -388,6 +532,8 @@ void InputHandler::edit_templates() {
                 return;
             default:
                 cout << choice << " is not an option" << endl;
+                break;
+
         }
     }
 }

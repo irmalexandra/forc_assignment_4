@@ -126,6 +126,7 @@ void FileHandler::save_roster(Payload* payload, string* roster_name){
 
 void FileHandler::load_roster(Payload *payload, string *roster_name) {
     char single_line[32] = {};
+    payload->species_map->clear();
     cout << *roster_name << endl;
     ifstream fileIn (*roster_name);
     if(fileIn.fail()){
@@ -168,6 +169,8 @@ void FileHandler::load_roster(Payload *payload, string *roster_name) {
         line_string = string(single_line);
         template_name = line_string;
 
+
+
         fileIn.getline(single_line, 32);
         line_string = string(single_line);
         stats->life = stoi(split_string(line_string, " ").at(1));
@@ -183,6 +186,14 @@ void FileHandler::load_roster(Payload *payload, string *roster_name) {
         fileIn.getline(single_line, 32);
         line_string = string(single_line);
         if(type == "Creature" || type == "Eldritch Horror"){
+            if(payload->species_map->find(template_name) == payload->species_map->end()){
+                payload->species_map->insert(std::pair<string, int>(template_name, 1));
+            }
+            if(stats->name.substr(0, template_name.length())
+               + to_string(payload->species_map->at(template_name)) == stats->name){
+                payload->species_map->at(template_name)++;
+            }
+
             auto it = find_if(payload->DHSpecies->get_data()->begin(), payload->DHSpecies->get_data()->end(),
                               [&template_name]( Species* obj) {return obj->get_name() == template_name;});
             auto index = std::distance(payload->DHSpecies->get_data()->begin(), it);

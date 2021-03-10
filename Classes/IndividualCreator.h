@@ -30,7 +30,7 @@ public:
 private:
     const int base_stat_count = 3;
     int* base_stats;
-    map<string, int> species_map;
+
 
 };
 

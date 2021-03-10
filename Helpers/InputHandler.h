@@ -62,7 +62,7 @@ private:
     void view_shortened_individuals();
 
     Payload* payload;
-
+    map<string, int>* species_map;
     FileHandler* file_handler;
 };
 

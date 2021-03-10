@@ -49,6 +49,12 @@ int get_int_within_range(int lower, int upper, const std::string& display_string
         std::cout << "The range is from " << lower << " to " << upper << std::endl;
         std::cout << display_string << std::endl;
         std::cin >> input;
+        if(cin.fail()){
+            cout << "Invalid input" << endl;
+            cin.clear();
+            cin.ignore(std::numeric_limits<int>::max(),'\n');
+            continue;
+        }
         if(input == lower){
             return input;
         }
@@ -58,10 +64,16 @@ int get_int_within_range(int lower, int upper, const std::string& display_string
 
 std::string* gender_picker() {
     int choice;
-    std::cout << "Pick a gender:\n1. Male\n2. Female\n3. Other"<< std::endl;
     enum Gender { Male = 1, Female = 2, Other = 3};
     while(true){
+        std::cout << "Pick a gender:\n1. Male\n2. Female\n3. Other"<< std::endl;
         std::cin >> choice;
+        if(cin.fail()){
+            cout << "Invalid input" << endl;
+            cin.clear();
+            cin.ignore(std::numeric_limits<int>::max(),'\n');
+            continue;
+        }
         switch (choice) {
             case Male:
                 return new std::string("Male");
@@ -71,6 +83,8 @@ std::string* gender_picker() {
                 return new std::string("Other");
             default:
                 std::cout << choice << " is not a valid option";
+                break;
+
         }
     }
 }
