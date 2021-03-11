@@ -2,10 +2,10 @@
 
 
 bool create_another_character(){
-    cout << "Create another? (y/n)" << endl;
-    char choice = 'y';
+    cout << "Create another?\n1. Yes\n2. No" << endl;
+    int choice = 2;
     cin >> choice;
-    return choice == 'y';
+    return choice == 1;
 }
 
 InputHandler::InputHandler() {
@@ -216,7 +216,6 @@ void InputHandler::select_template_for_individual() {
                         new_eldritch_horror->edit();
                         if(original_name != new_eldritch_horror->get_name()){
                             this->species_map->find(new_eldritch_horror->get_template()->get_name())->second--;
-
                         }
                     }
                     auto_save();
