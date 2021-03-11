@@ -1,6 +1,38 @@
 #include "HelperFunctions.h"
+#include <iostream>
+#include <cstring>
+string clean_string(string* the_string){
+    int length = the_string->length();
+    char char_array[length + 1];
+    string some_string = "";
+    int index = 0;
+    for (char const c: *the_string ){
+        if((c != '\r') || (c != ' ') || (c != '\n')){
+            char_array[index] = c;
+            index++;
+        }
+    }
+    for(int i = 0; i < index; i++){
+        some_string += char_array[i];
+    }
+    return some_string;
+};
 
 
+string clean_string2(string* the_string){
+    int n = the_string->length();
+    string sanetized_string;
+
+    char char_array[n + 1];
+    strcpy(char_array, the_string->c_str());
+
+    for (int i = 0; i < n; i++)
+        if(char_array[i] != '\n' || char_array[i] != '\r'){
+            sanetized_string += char_array[i];
+        }
+
+    return sanetized_string;
+}
 
 //std::vector<std::string>* split_string(std::string string_in, char delim){
 //    auto* ret_str = new std::vector<std::string>;
@@ -20,6 +52,7 @@
 //}
 
 vector<string> split_string(string str, string token){
+    cout << "Splitting string: " << str << endl;
     vector<string>result;
     while(str.size()){
         int index = str.find(token);

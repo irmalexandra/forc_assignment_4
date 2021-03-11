@@ -49,6 +49,8 @@ struct Range {
     int max = 0;
 };
 
+string clean_string(string* the_string);
+string clean_string2(string* the_string);
 int get_random_integer(const Range& range);
 int get_int_within_range(int lower, int upper, const std::string& display_string);
 std::string* gender_picker();

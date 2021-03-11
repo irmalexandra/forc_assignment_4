@@ -1,6 +1,11 @@
 #include <algorithm>
 #include "FileHandler.h"
 
+string clean_str(string& str){
+    str.erase(remove(str.begin(), str.end(), '\n'), str.end());
+    str.erase(remove(str.begin(), str.end(), '\r'), str.end());
+    return str;
+}
 
 
 void FileHandler::load_templates(Payload* payload){
@@ -24,7 +29,7 @@ void FileHandler::load_templates(Payload* payload){
     fileIn.getline(single_line, 32);
     line_str = string(single_line);
 
-
+    cout << "firs line string" << endl;
     amount = stoi(line_str);
     for(int i = 0; i < amount; i++){
 
@@ -34,6 +39,7 @@ void FileHandler::load_templates(Payload* payload){
             fileIn.getline(single_line, 32);
             line_str = string(single_line);
         }
+
         fileIn.getline(single_line, 32);
         line_str = string(single_line);
         name = split_string(line_str).at(1);
@@ -63,7 +69,7 @@ void FileHandler::load_templates(Payload* payload){
         stats->int_min = stoi(temp_string_array->at(0));
         stats->int_max = stoi(temp_string_array->at(1));
 
-        if(type != "Person"){
+        if(type != "Person" || type.substr(0, type.length()-1) != "Person"){
             fileIn.getline(single_line, 32);
             line_str = string(single_line);
             if(line_str == "Natural"){
@@ -74,10 +80,15 @@ void FileHandler::load_templates(Payload* payload){
             }
             fileIn.getline(single_line, 32);
             line_str = string(single_line);
+            cout << "splitting distortion or what ever " << endl;
             *temp_string_array = split_string(split_string(line_str).at(1), "-");
+            cout << "done splitting distortion or what ever " << endl;
+
             stats->dis_min = stoi(temp_string_array->at(0));
             stats->dis_max = stoi(temp_string_array->at(1));
-            if(type == "Eldritch Horror"){
+            cout << "before eldritch if check, type is" << endl;
+            if(type == ("Eldritch Horror") || type.substr(0, type.length() -1) == "Eldritch Horror"){
+                cout << "inside eldritch if check" << endl;
                 fileIn.getline(single_line, 32);
                 line_str = string(single_line);
                 *temp_string_array = split_string(split_string(line_str).at(1), "-");
@@ -86,10 +97,11 @@ void FileHandler::load_templates(Payload* payload){
                 stats->is_eldritch = true;
             }
         }
-
+        cout << "above person"<< endl;
         if (type == "Person"){
             payload->DHRoles->get_data()->push_back(new Role(stats));
         } else if (type == "Eldritch Horror" || type == "Creature") {
+            cout << "in eldritch horror pusher " << endl;
             payload->DHSpecies->get_data()->push_back(new Species(stats));
         }
         fileIn.getline(single_line, 32); // To skip empty lines
@@ -215,8 +227,6 @@ void FileHandler::load_roster(Payload *payload, string *roster_name) {
             fileIn.getline(single_line, 32);
             line_string = string(single_line);
             stats->disquiet = stoi(split_string(line_string).at(1));
-
-
 
             if (type == "Eldritch Horror"){
                 fileIn.getline(single_line, 32);
