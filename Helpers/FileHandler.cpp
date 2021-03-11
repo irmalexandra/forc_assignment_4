@@ -69,7 +69,18 @@ void FileHandler::load_templates(Payload* payload){
         stats->int_min = stoi(temp_string_array->at(0));
         stats->int_max = stoi(temp_string_array->at(1));
 
-        if(type != "Person" || type.substr(0, type.length()-1) != "Person"){
+        ultimate_cleaner_3000(type);
+
+
+        string temp = "Eldritch Horror";
+        for(int j = 0; j <= temp.length(); j++){
+            cout << (int)temp.c_str()[j] << endl;
+        }
+        for(int j = 0; j <= temp.length(); j++){
+            cout << (int)type.c_str()[j] << endl;
+        }
+
+        if(type != "Person" /*|| clean_string(&type) != "Person"*/){
             fileIn.getline(single_line, 32);
             line_str = string(single_line);
             if(line_str == "Natural"){
@@ -88,6 +99,7 @@ void FileHandler::load_templates(Payload* payload){
             stats->dis_max = stoi(temp_string_array->at(1));
             cout << "before eldritch if check, type is" << endl;
             if(type == ("Eldritch Horror") || type.substr(0, type.length() -1) == "Eldritch Horror"){
+
                 cout << "inside eldritch if check" << endl;
                 fileIn.getline(single_line, 32);
                 line_str = string(single_line);

@@ -7,7 +7,7 @@ string clean_string(string* the_string){
     string some_string = "";
     int index = 0;
     for (char const c: *the_string ){
-        if((c != '\r') || (c != ' ') || (c != '\n')){
+        if((c != '\r') || (c != '\n')){
             char_array[index] = c;
             index++;
         }
@@ -27,11 +27,47 @@ string clean_string2(string* the_string){
     strcpy(char_array, the_string->c_str());
 
     for (int i = 0; i < n; i++)
+
         if(char_array[i] != '\n' || char_array[i] != '\r'){
             sanetized_string += char_array[i];
+        } else {
+            cout << "Found a carriage return, or new line" << endl;
         }
 
     return sanetized_string;
+}
+
+string ultimate_cleaner_3000(string input){
+    auto c_input = input.c_str();
+    char* ret_str = new char[input.length()];
+    for(int i = 0; i <= input.length(); i++){
+        cout << (int) c_input[i] << " <--- is int char thing " << endl;
+        if ((int)c_input[i] == 13){
+            cout << "Found a carriage return" << endl;
+            continue;
+        }
+        else if((int)c_input[i] == 10){
+            continue;
+        }
+        else{
+            ret_str[i] = c_input[i];
+        }
+    }
+  return to_string(*ret_str);
+}
+
+bool ultimate_cleaner_3001(string* input, string* other_string){
+    auto c_input = input->c_str();
+    auto c_input2 = other_string->c_str();
+    for(int i = 0; i <= input->length(); i++){
+        if ((int)c_input[i] == 13){
+            continue;
+        }
+        else if((int)c_input[i] != (int) c_input2[i]){
+            return false;
+        }
+    }
+    return true;
 }
 
 //std::vector<std::string>* split_string(std::string string_in, char delim){
