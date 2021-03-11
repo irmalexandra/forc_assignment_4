@@ -39,19 +39,14 @@ string clean_string2(string* the_string){
 
 string ultimate_cleaner_3000(string input){
     auto c_input = input.c_str();
-    char* ret_str = new char[input.length()];
+    string ret_str = "";
     for(int i = 0; i <= input.length(); i++){
         if ((int)c_input[i] != 13 || (int)c_input[i] != 10){
             ret_str += c_input[i];
         }
-        else if((int)c_input[i] == 10){
-            continue;
-        }
-        else{
-            ret_str[i] = c_input[i];
-        }
+
     }
-  return to_string(*ret_str);
+  return ret_str;
 }
 
 bool ultimate_cleaner_3001(string* input, string* other_string){

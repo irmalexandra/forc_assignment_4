@@ -43,11 +43,11 @@ void FileHandler::load_templates(Payload* payload){
         fileIn.getline(single_line, 32);
         line_str = string(single_line);
         name = split_string(line_str).at(1);
-        stats->name = name;
+        stats->name = name.substr(0, name.length()-1);
 
         fileIn.getline(single_line, 32);
         line_str = string(single_line);
-        type = line_str;
+        type = line_str.substr(0, line_str.length()-1);
         stats->type = type;
 
 
@@ -69,21 +69,10 @@ void FileHandler::load_templates(Payload* payload){
         stats->int_min = stoi(temp_string_array->at(0));
         stats->int_max = stoi(temp_string_array->at(1));
 
-        ultimate_cleaner_3000(type);
-
-
-        string temp = "Eldritch Horror";
-        for(int j = 0; j <= temp.length(); j++){
-            cout << (int)temp.c_str()[j] << endl;
-        }
-        for(int j = 0; j <= temp.length(); j++){
-            cout << (int)type.c_str()[j] << endl;
-        }
-
-        if(type != "Person" /*|| clean_string(&type) != "Person"*/){
+        if(type != "Person"){
             fileIn.getline(single_line, 32);
             line_str = string(single_line);
-            if(line_str == "Natural"){
+            if(type.substr(0, type.length()-1) == "Natural"){
                 stats->unnatural = false;
             }
             else{
@@ -97,8 +86,8 @@ void FileHandler::load_templates(Payload* payload){
 
             stats->dis_min = stoi(temp_string_array->at(0));
             stats->dis_max = stoi(temp_string_array->at(1));
-            cout << "before eldritch if check, type is" << endl;
-            if(type == ("Eldritch Horror") || type.substr(0, type.length() -1) == "Eldritch Horror"){
+//            cout << "before eldritch if check, type is" << endl;
+            if(type == ("Eldritch Horror")){
 
 //                cout << "inside eldritch if check" << endl;
                 fileIn.getline(single_line, 32);
@@ -163,7 +152,7 @@ void FileHandler::load_roster(Payload *payload, string *roster_name) {
     cout << "Loading roster from " << *roster_name << "..." << endl;
     char single_line[32] = {};
     payload->species_map->clear();
-    ifstream fileIn (*roster_name);
+    ifstream fileIn (*roster_name, ios::binary);
     if(fileIn.fail()){
         cout << "File not found" << endl;
         return;
@@ -188,21 +177,22 @@ void FileHandler::load_roster(Payload *payload, string *roster_name) {
 
         auto stats = new baseIndividualStats();
 
-        while(line_string == ""){
+        while(line_string == "" || line_string == "\n" || line_string == "\r" || line_string == "\n\r" || line_string == "\r\n"){
             fileIn.getline(single_line, 32);
             line_string = string(single_line);
         }
 
-        stats->name = split_string(line_string).at(1);
+        auto temp = split_string(line_string).at(1);
+        stats->name = temp.substr(0, temp.length()-1);
 
         fileIn.getline(single_line, 32);
         line_string = string(single_line);
-        type = line_string;
+        type = line_string.substr(0, line_string.length()-1);
         stats->type = type;
 
         fileIn.getline(single_line, 32);
         line_string = string(single_line);
-        template_name = line_string;
+        template_name = line_string.substr(0, line_string.length()-1);
 
 
 
@@ -221,6 +211,7 @@ void FileHandler::load_roster(Payload *payload, string *roster_name) {
         fileIn.getline(single_line, 32);
         line_string = string(single_line);
         if(type == "Creature" || type == "Eldritch Horror"){
+            cout << "before map" << endl;
             if(payload->species_map->find(template_name) == payload->species_map->end()){
                 payload->species_map->insert(std::pair<string, int>(template_name, 1));
             }
@@ -229,14 +220,14 @@ void FileHandler::load_roster(Payload *payload, string *roster_name) {
                + to_string(payload->species_map->at(template_name)) == stats->name){
                 payload->species_map->at(template_name)++;
             }
-
+            cout << "end of map" << endl;
             auto it = find_if(payload->DHSpecies->get_data()->begin(), payload->DHSpecies->get_data()->end(),
                               [&template_name]( Species* obj) {return obj->get_name() == template_name;});
             auto index = std::distance(payload->DHSpecies->get_data()->begin(), it);
             auto species = payload->DHSpecies->get_data()->at(index);
 
             // IMPLEMENT TEMPLATE LOOKUP
-            stats->unnatural = (line_string != "Natural");
+            stats->unnatural = (type != "Natural");
             fileIn.getline(single_line, 32);
             line_string = string(single_line);
             stats->disquiet = stoi(split_string(line_string).at(1));
@@ -259,15 +250,28 @@ void FileHandler::load_roster(Payload *payload, string *roster_name) {
             line_string = string(single_line);
             stats->fear = stoi(split_string(line_string).at(1));
 
+            cout << "before lambda" << endl;
+            for (int j = 0; j <= template_name.length(); j++){
+                cout << (int)template_name.c_str()[j] << endl;
+            }
+            for(const auto role: *payload->DHRoles->get_data()){
+                cout << "lol" << role->get_name() << endl;
+            }
             auto it = find_if(payload->DHRoles->get_data()->begin(), payload->DHRoles->get_data()->end(),
                               [&template_name]( Role* obj) {return obj->get_name() == template_name;});
+            cout << "after lambda" << endl;
             auto index = std::distance(payload->DHRoles->get_data()->begin(), it);
 
             auto role = payload->DHRoles->get_data()->at(index);
+
+            cout << "before person check " << endl;
             if(type == "Person"){
+                cout << "inside person check" << endl;
                 payload->DHPersons->get_data()->push_back(new Person(stats, role));
             }
+            cout << "before invest check " << endl;
             if(type == "Investigator"){
+                cout << "inside invest check" << endl;
                 fileIn.getline(single_line, 32);
                 line_string = string(single_line);
                 stats->terror = stoi(split_string(line_string).at(1));
