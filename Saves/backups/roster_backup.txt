@@ -1,0 +1,10 @@
+1
+Name: Wolf1
+Creature
+Wolf
+Life: 4
+Strength: 6
+Intelligence: 5
+Natural
+Disquiet: 2
+
