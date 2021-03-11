@@ -4,9 +4,11 @@
 
 
 void FileHandler::load_templates(Payload* payload){
+
     char single_line[32] = {};
     auto thing = new vector<BaseTemplate>;
-    string filename = "../Resources/template_file.txt";
+    string filename = "Resources/template_file.txt";
+    cout << "Loading templates from " << filename << "..." << endl;
     speciesStats* stats;
 
     string name;
@@ -92,10 +94,12 @@ void FileHandler::load_templates(Payload* payload){
             delete stats;
         }
     }
+    cout << "Done!" << endl;
 }
 
 void FileHandler::save_templates(Payload* payload) {
     string filename = "../Resources/template_file.txt";
+    cout << "Saving templates to " << filename << "..." << endl;
     ofstream fileout(filename, ios::trunc);
 
     fileout << payload->DHSpecies->get_data()->size() << endl;
@@ -103,9 +107,11 @@ void FileHandler::save_templates(Payload* payload) {
     fileout << payload->DHRoles->get_data()->size() << endl;
     fileout << payload->DHRoles;
     fileout.close();
+    cout << "Done!" << endl;
 }
 
 void FileHandler::save_roster(Payload* payload, string* roster_name){
+    cout << "Saving roster to " << *roster_name << "..." << endl;
     int amount = 0;
     amount += payload->DHInvestigators->get_data()->size();
     amount += payload->DHPersons->get_data()->size();
@@ -122,15 +128,16 @@ void FileHandler::save_roster(Payload* payload, string* roster_name){
 //    fileout << payload->DHEldritch_Horrors->get_data()->size() << endl;
     fileout << payload->DHEldritch_Horrors;
     fileout.close();
+    cout << "Done!" << endl;
 }
 
 void FileHandler::load_roster(Payload *payload, string *roster_name) {
+    cout << "Loading roster from " << *roster_name << "..." << endl;
     char single_line[32] = {};
     payload->species_map->clear();
-    cout << *roster_name << endl;
     ifstream fileIn (*roster_name);
     if(fileIn.fail()){
-        cout << "no good" << endl;
+        cout << "File not found" << endl;
         return;
     }
 
@@ -244,5 +251,5 @@ void FileHandler::load_roster(Payload *payload, string *roster_name) {
         }
 
     }
-
+    cout << "Done!" << endl;
 }

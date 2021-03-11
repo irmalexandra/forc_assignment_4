@@ -20,15 +20,12 @@ void stuff(InputHandler* thing){
 
 using namespace std;
 int main() {
+    cout << "Starting... " << endl;
+    cout << "Setting random seed" << endl;
     srand(std::chrono::system_clock::to_time_t(std::chrono::system_clock::now()));
     auto input_handler = new InputHandler();
-//    file_handler->load_templates("../Resources/template_file.txt");
-
-
     input_handler->main_menu();
-
-
-    //file_handler->save_templates(input_handler);
+    cout << "Exiting" << endl;
     return 0;
 
 }

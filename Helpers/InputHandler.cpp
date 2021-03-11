@@ -69,6 +69,7 @@ InputHandler::~InputHandler() {
 void InputHandler::main_menu() {
     int choice;
     string filename;
+    string folder = "Saves/";
     while(true){
         cout << "1. Templates\n2. Individuals\n3. Save current roster\n4. Load new roster\n5. Quit" << endl;
         cin >> choice;
@@ -87,17 +88,16 @@ void InputHandler::main_menu() {
                 this->individual_menu();
                 break;
             case 3:
-                cout << "Enter the filename of the new roster: ";
+                cout << "Enter the filename of the new roster: Save/";
                 cin >> filename;
-                this->file_handler->save_roster(this->payload, new string(filename));
+                this->file_handler->save_roster(this->payload, new string(folder + filename));
                 break;
             case 4:
                 cout << "Enter the filename of the roster you want to load: ";
                 cin >> filename;
-                this->file_handler->load_roster(this->payload, new string(filename));
+                this->file_handler->load_roster(this->payload, new string(folder + filename));
                 break;
             case 5:
-                this->file_handler->save_templates(this->payload);
                 return;
             default:
                 cout << choice << " is not an option" << endl;
@@ -219,6 +219,7 @@ void InputHandler::select_template_for_individual() {
 
                         }
                     }
+                    auto_save();
                 }
                 else {
                     auto new_creature = individual_creator->createCreature(species);
@@ -245,6 +246,7 @@ void InputHandler::select_template_for_individual() {
                             this->species_map->find(new_creature->get_template()->get_name())->second--;
                         }
                     }
+                    auto_save();
                 }
 
             } else if (role_index >= 0) {
@@ -276,8 +278,8 @@ void InputHandler::select_template_for_individual() {
                         if(choice == 1){
                             new_investigator->edit();
                         }
-                        auto_save();
                         runner = false;
+                        auto_save();
 
                     }
                     else if (choice == 2){
@@ -296,8 +298,9 @@ void InputHandler::select_template_for_individual() {
                         if(choice == 1){
                             new_person->edit();
                         }
-                        auto_save();
+
                         runner = false;
+                        auto_save();
                     }
                     else{
                         cout << choice << " is not a valid option" << endl;
@@ -342,10 +345,12 @@ void InputHandler::create_template() {
            case 1:
                species = this->template_creator->create_species();
                this->DHSpecies->get_data()->push_back(species);
+               this->file_handler->save_templates(this->payload);
                break;
            case 2:
                role = this->template_creator->create_role();
                this->DHRoles->get_data()->push_back(role);
+               this->file_handler->save_templates(this->payload);
                break;
            default:
                cout << "Invalid selection: " << choice << endl;
@@ -353,6 +358,7 @@ void InputHandler::create_template() {
 
        }
         if(!create_another_character()){
+
             return;
         }
     }
@@ -504,10 +510,12 @@ void InputHandler::delete_template(){
     else{
         if(species_index != -1){
             this->DHSpecies->get_data()->erase(this->DHSpecies->get_data()->begin() + species_index);
+            this->file_handler->save_templates(this->payload);
         }
 
         if(role_index != -1){
             this->DHRoles->get_data()->erase(this->DHRoles->get_data()->begin() + role_index);
+            this->file_handler->save_templates(this->payload);
         }
     }
 }
@@ -563,5 +571,6 @@ int InputHandler::get_index_species(const string& name) const {
 }
 
 void InputHandler::auto_save(){
-    this->file_handler->save_roster(this->payload, new string("../roster_backup.txt"));
+    cout << "Auto Saving..." << endl;
+    this->file_handler->save_roster(this->payload, new string("Saves/backups/roster_backup.txt"));
 }
