@@ -29,7 +29,7 @@ void FileHandler::load_templates(Payload* payload){
     fileIn.getline(single_line, 32);
     line_str = string(single_line);
 
-    cout << "firs line string" << endl;
+//    cout << "firs line string" << endl;
     amount = stoi(line_str);
     for(int i = 0; i < amount; i++){
 
@@ -91,16 +91,16 @@ void FileHandler::load_templates(Payload* payload){
             }
             fileIn.getline(single_line, 32);
             line_str = string(single_line);
-            cout << "splitting distortion or what ever " << endl;
+//            cout << "splitting distortion or what ever " << endl;
             *temp_string_array = split_string(split_string(line_str).at(1), "-");
-            cout << "done splitting distortion or what ever " << endl;
+//            cout << "done splitting distortion or what ever " << endl;
 
             stats->dis_min = stoi(temp_string_array->at(0));
             stats->dis_max = stoi(temp_string_array->at(1));
             cout << "before eldritch if check, type is" << endl;
             if(type == ("Eldritch Horror") || type.substr(0, type.length() -1) == "Eldritch Horror"){
 
-                cout << "inside eldritch if check" << endl;
+//                cout << "inside eldritch if check" << endl;
                 fileIn.getline(single_line, 32);
                 line_str = string(single_line);
                 *temp_string_array = split_string(split_string(line_str).at(1), "-");
@@ -109,11 +109,11 @@ void FileHandler::load_templates(Payload* payload){
                 stats->is_eldritch = true;
             }
         }
-        cout << "above person"<< endl;
+//        cout << "above person"<< endl;
         if (type == "Person"){
             payload->DHRoles->get_data()->push_back(new Role(stats));
         } else if (type == "Eldritch Horror" || type == "Creature") {
-            cout << "in eldritch horror pusher " << endl;
+//            cout << "in eldritch horror pusher " << endl;
             payload->DHSpecies->get_data()->push_back(new Species(stats));
         }
         fileIn.getline(single_line, 32); // To skip empty lines
@@ -224,6 +224,7 @@ void FileHandler::load_roster(Payload *payload, string *roster_name) {
             if(payload->species_map->find(template_name) == payload->species_map->end()){
                 payload->species_map->insert(std::pair<string, int>(template_name, 1));
             }
+            cout << "middle of map" << endl;
             if(stats->name.substr(0, template_name.length())
                + to_string(payload->species_map->at(template_name)) == stats->name){
                 payload->species_map->at(template_name)++;
@@ -261,6 +262,7 @@ void FileHandler::load_roster(Payload *payload, string *roster_name) {
             auto it = find_if(payload->DHRoles->get_data()->begin(), payload->DHRoles->get_data()->end(),
                               [&template_name]( Role* obj) {return obj->get_name() == template_name;});
             auto index = std::distance(payload->DHRoles->get_data()->begin(), it);
+
             auto role = payload->DHRoles->get_data()->at(index);
             if(type == "Person"){
                 payload->DHPersons->get_data()->push_back(new Person(stats, role));
