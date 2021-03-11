@@ -41,10 +41,8 @@ string ultimate_cleaner_3000(string input){
     auto c_input = input.c_str();
     char* ret_str = new char[input.length()];
     for(int i = 0; i <= input.length(); i++){
-        cout << (int) c_input[i] << " <--- is int char thing " << endl;
-        if ((int)c_input[i] == 13){
-            cout << "Found a carriage return" << endl;
-            continue;
+        if ((int)c_input[i] != 13 || (int)c_input[i] != 10){
+            ret_str += c_input[i];
         }
         else if((int)c_input[i] == 10){
             continue;

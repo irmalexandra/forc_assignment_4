@@ -24,7 +24,7 @@ void FileHandler::load_templates(Payload* payload){
     int amount;
 
     string line_str;
-    ifstream fileIn (filename);
+    ifstream fileIn (filename, ios::binary);
 
     fileIn.getline(single_line, 32);
     line_str = string(single_line);
