@@ -20,91 +20,95 @@ void FileHandler::load_templates(Payload* payload){
 
     string line_str;
     ifstream fileIn (filename);
-    while (!fileIn.eof()){
+
+    fileIn.getline(single_line, 32);
+    line_str = string(single_line);
+
+
+    amount = stoi(line_str);
+    for(int i = 0; i < amount; i++){
+
+        stats = new speciesStats();
+
+        while(line_str == ""){
+            fileIn.getline(single_line, 32);
+            line_str = string(single_line);
+        }
         fileIn.getline(single_line, 32);
         line_str = string(single_line);
+        name = split_string(line_str).at(1);
+        stats->name = name;
 
-        if(line_str.empty()){
-            continue;
-        }
-        amount = stoi(line_str);
-        for(int i = 0; i < amount; i++){
+        fileIn.getline(single_line, 32);
+        line_str = string(single_line);
+        type = line_str;
+        stats->type = type;
 
 
-            stats = new speciesStats();
+        fileIn.getline(single_line, 32);
+        line_str = string(single_line);
+        *temp_string_array = split_string(split_string(line_str).at(1), "-");
+        stats->life_min = stoi(temp_string_array->at(0));
+        stats->life_max = stoi(temp_string_array->at(1));
+
+        fileIn.getline(single_line, 32);
+        line_str = string(single_line);
+        *temp_string_array = split_string(split_string(line_str).at(1), "-");
+        stats->str_min = stoi(temp_string_array->at(0));
+        stats->str_max = stoi(temp_string_array->at(1));
+
+        fileIn.getline(single_line, 32);
+        line_str = string(single_line);
+        *temp_string_array = split_string(split_string(line_str).at(1), "-");
+        stats->int_min = stoi(temp_string_array->at(0));
+        stats->int_max = stoi(temp_string_array->at(1));
+
+        if(type != "Person"){
             fileIn.getline(single_line, 32);
             line_str = string(single_line);
-            name = split_string(line_str).at(1);
-            stats->name = name;
-
-            fileIn.getline(single_line, 32);
-            line_str = string(single_line);
-            type = line_str;
-            stats->type = type;
-
-
+            if(line_str == "Natural"){
+                stats->unnatural = false;
+            }
+            else{
+                stats->unnatural = true;
+            }
             fileIn.getline(single_line, 32);
             line_str = string(single_line);
             *temp_string_array = split_string(split_string(line_str).at(1), "-");
-            stats->life_min = stoi(temp_string_array->at(0));
-            stats->life_max = stoi(temp_string_array->at(1));
-
-            fileIn.getline(single_line, 32);
-            line_str = string(single_line);
-            *temp_string_array = split_string(split_string(line_str).at(1), "-");
-            stats->str_min = stoi(temp_string_array->at(0));
-            stats->str_max = stoi(temp_string_array->at(1));
-
-            fileIn.getline(single_line, 32);
-            line_str = string(single_line);
-            *temp_string_array = split_string(split_string(line_str).at(1), "-");
-            stats->int_min = stoi(temp_string_array->at(0));
-            stats->int_max = stoi(temp_string_array->at(1));
-
-            if(type != "Person"){
-                fileIn.getline(single_line, 32);
-                line_str = string(single_line);
-                if(line_str == "Natural"){
-                    stats->unnatural = false;
-                }
-                else{
-                    stats->unnatural = true;
-                }
+            stats->dis_min = stoi(temp_string_array->at(0));
+            stats->dis_max = stoi(temp_string_array->at(1));
+            if(type == "Eldritch Horror"){
                 fileIn.getline(single_line, 32);
                 line_str = string(single_line);
                 *temp_string_array = split_string(split_string(line_str).at(1), "-");
-                stats->dis_min = stoi(temp_string_array->at(0));
-                stats->dis_max = stoi(temp_string_array->at(1));
-                if(type == "Eldritch Horror"){
-                    fileIn.getline(single_line, 32);
-                    line_str = string(single_line);
-                    *temp_string_array = split_string(split_string(line_str).at(1), "-");
-                    stats->trauma_min = stoi(temp_string_array->at(0));
-                    stats->trauma_max = stoi(temp_string_array->at(1));
-                    stats->is_eldritch = true;
-                }
+                stats->trauma_min = stoi(temp_string_array->at(0));
+                stats->trauma_max = stoi(temp_string_array->at(1));
+                stats->is_eldritch = true;
             }
-
-            if (type == "Person"){
-                payload->DHRoles->get_data()->push_back(new Role(stats));
-            } else if (type == "Eldritch Horror" || type == "Creature") {
-                payload->DHSpecies->get_data()->push_back(new Species(stats));
-            }
-            fileIn.getline(single_line, 32); // To skip empty lines
-            delete stats;
         }
+
+        if (type == "Person"){
+            payload->DHRoles->get_data()->push_back(new Role(stats));
+        } else if (type == "Eldritch Horror" || type == "Creature") {
+            payload->DHSpecies->get_data()->push_back(new Species(stats));
+        }
+        fileIn.getline(single_line, 32); // To skip empty lines
+        delete stats;
     }
+
     cout << "Done!" << endl;
 }
 
 void FileHandler::save_templates(Payload* payload) {
-    string filename = "../Resources/template_file.txt";
+    string filename = "Resources/template_file.txt";
     cout << "Saving templates to " << filename << "..." << endl;
     ofstream fileout(filename, ios::trunc);
+    int amount = 0;
+    amount += payload->DHRoles->get_data()->size();
+    amount += payload->DHSpecies->get_data()->size();
 
-    fileout << payload->DHSpecies->get_data()->size() << endl;
+    fileout << amount << endl;
     fileout << payload->DHSpecies;
-    fileout << payload->DHRoles->get_data()->size() << endl;
     fileout << payload->DHRoles;
     fileout.close();
     cout << "Done!" << endl;

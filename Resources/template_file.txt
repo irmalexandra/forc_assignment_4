@@ -1,4 +1,4 @@
-4
+8
 Name: Wolf
 Creature
 Life: 4-4
@@ -33,7 +33,14 @@ Unnatural
 Disquiet: 10-10
 Traumatism: 2-2
 
-3
+Name: NewestSpecies
+Creature
+Life: 1-2
+Strength: 5-6
+Intelligence: 3-4
+Natural
+Disquiet: 7-8
+
 Name: Nurse
 Person
 Life: 5-7
