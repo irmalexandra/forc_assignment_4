@@ -1,17 +1,9 @@
 #include <algorithm>
 #include "FileHandler.h"
 
-string clean_str(string& str){
-    str.erase(remove(str.begin(), str.end(), '\n'), str.end());
-    str.erase(remove(str.begin(), str.end(), '\r'), str.end());
-    return str;
-}
-
-
 void FileHandler::load_templates(Payload* payload){
 
     char single_line[32] = {};
-    auto thing = new vector<BaseTemplate>;
     string filename = "Resources/template_file.txt";
     cout << "Loading templates from " << filename << "..." << endl;
     speciesStats* stats;
@@ -29,7 +21,6 @@ void FileHandler::load_templates(Payload* payload){
     fileIn.getline(single_line, 32);
     line_str = string(single_line);
 
-//    cout << "firs line string" << endl;
     amount = stoi(line_str);
     for(int i = 0; i < amount; i++){
 
@@ -80,16 +71,12 @@ void FileHandler::load_templates(Payload* payload){
             }
             fileIn.getline(single_line, 32);
             line_str = string(single_line);
-//            cout << "splitting distortion or what ever " << endl;
             *temp_string_array = split_string(split_string(line_str).at(1), "-");
-//            cout << "done splitting distortion or what ever " << endl;
 
             stats->dis_min = stoi(temp_string_array->at(0));
             stats->dis_max = stoi(temp_string_array->at(1));
-//            cout << "before eldritch if check, type is" << endl;
             if(type == ("Eldritch Horror")){
 
-//                cout << "inside eldritch if check" << endl;
                 fileIn.getline(single_line, 32);
                 line_str = string(single_line);
                 *temp_string_array = split_string(split_string(line_str).at(1), "-");
@@ -98,11 +85,9 @@ void FileHandler::load_templates(Payload* payload){
                 stats->is_eldritch = true;
             }
         }
-//        cout << "above person"<< endl;
         if (type == "Person"){
             payload->DHRoles->get_data()->push_back(new Role(stats));
         } else if (type == "Eldritch Horror" || type == "Creature") {
-//            cout << "in eldritch horror pusher " << endl;
             payload->DHSpecies->get_data()->push_back(new Species(stats));
         }
         fileIn.getline(single_line, 32); // To skip empty lines
@@ -211,16 +196,13 @@ void FileHandler::load_roster(Payload *payload, string *roster_name) {
         fileIn.getline(single_line, 32);
         line_string = string(single_line);
         if(type == "Creature" || type == "Eldritch Horror"){
-            cout << "before map" << endl;
             if(payload->species_map->find(template_name) == payload->species_map->end()){
                 payload->species_map->insert(std::pair<string, int>(template_name, 1));
             }
-            cout << "middle of map" << endl;
             if(stats->name.substr(0, template_name.length())
                + to_string(payload->species_map->at(template_name)) == stats->name){
                 payload->species_map->at(template_name)++;
             }
-            cout << "end of map" << endl;
             auto it = find_if(payload->DHSpecies->get_data()->begin(), payload->DHSpecies->get_data()->end(),
                               [&template_name]( Species* obj) {return obj->get_name() == template_name;});
             auto index = std::distance(payload->DHSpecies->get_data()->begin(), it);
@@ -250,28 +232,16 @@ void FileHandler::load_roster(Payload *payload, string *roster_name) {
             line_string = string(single_line);
             stats->fear = stoi(split_string(line_string).at(1));
 
-            cout << "before lambda" << endl;
-            for (int j = 0; j <= template_name.length(); j++){
-                cout << (int)template_name.c_str()[j] << endl;
-            }
-            for(const auto role: *payload->DHRoles->get_data()){
-                cout << "lol" << role->get_name() << endl;
-            }
             auto it = find_if(payload->DHRoles->get_data()->begin(), payload->DHRoles->get_data()->end(),
                               [&template_name]( Role* obj) {return obj->get_name() == template_name;});
-            cout << "after lambda" << endl;
             auto index = std::distance(payload->DHRoles->get_data()->begin(), it);
 
             auto role = payload->DHRoles->get_data()->at(index);
 
-            cout << "before person check " << endl;
             if(type == "Person"){
-                cout << "inside person check" << endl;
                 payload->DHPersons->get_data()->push_back(new Person(stats, role));
             }
-            cout << "before invest check " << endl;
             if(type == "Investigator"){
-                cout << "inside invest check" << endl;
                 fileIn.getline(single_line, 32);
                 line_string = string(single_line);
                 stats->terror = stoi(split_string(line_string).at(1));

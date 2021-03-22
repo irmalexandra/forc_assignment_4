@@ -9,9 +9,6 @@ IndividualCreator::~IndividualCreator() {
     this->base_stats = nullptr;
 }
 
-
-
-
 Person *IndividualCreator::createPerson(Role* selected_role) {
     return new Person(
             this->get_individual_name(selected_role->get_type(), selected_role->get_name())

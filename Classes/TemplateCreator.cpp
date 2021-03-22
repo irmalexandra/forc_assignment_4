@@ -48,7 +48,6 @@ speciesStats* TemplateCreator::get_species_stats(){
 
 }
 
-
 Species *TemplateCreator::create_species() {
     speciesStats* stats = this->get_species_stats();
     return new Species(stats);

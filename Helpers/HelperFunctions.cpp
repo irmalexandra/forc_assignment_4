@@ -1,88 +1,8 @@
 #include "HelperFunctions.h"
 #include <iostream>
-#include <cstring>
-string clean_string(string* the_string){
-    int length = the_string->length();
-    char char_array[length + 1];
-    string some_string = "";
-    int index = 0;
-    for (char const c: *the_string ){
-        if((c != '\r') || (c != '\n')){
-            char_array[index] = c;
-            index++;
-        }
-    }
-    for(int i = 0; i < index; i++){
-        some_string += char_array[i];
-    }
-    return some_string;
-};
-
-
-string clean_string2(string* the_string){
-    int n = the_string->length();
-    string sanetized_string;
-
-    char char_array[n + 1];
-    strcpy(char_array, the_string->c_str());
-
-    for (int i = 0; i < n; i++)
-
-        if(char_array[i] != '\n' || char_array[i] != '\r'){
-            sanetized_string += char_array[i];
-        } else {
-            cout << "Found a carriage return, or new line" << endl;
-        }
-
-    return sanetized_string;
-}
-
-string ultimate_cleaner_3000(string input){
-    auto c_input = input.c_str();
-    string ret_str = "";
-    for(int i = 0; i <= input.length(); i++){
-        if ((int)c_input[i] != 13 || (int)c_input[i] != 10){
-            ret_str += c_input[i];
-        }
-
-    }
-  return ret_str;
-}
-
-bool ultimate_cleaner_3001(string* input, string* other_string){
-    auto c_input = input->c_str();
-    auto c_input2 = other_string->c_str();
-    for(int i = 0; i <= input->length(); i++){
-        if ((int)c_input[i] == 13){
-            continue;
-        }
-        else if((int)c_input[i] != (int) c_input2[i]){
-            return false;
-        }
-    }
-    return true;
-}
-
-//std::vector<std::string>* split_string(std::string string_in, char delim){
-//    auto* ret_str = new std::vector<std::string>;
-//    if (string_in.length() < 1) return ret_str;
-//    std::string temp_string = "";
-//    for (auto i : string_in){
-//        if (i == delim){
-//            ret_str->push_back(temp_string);
-//            temp_string = "";
-//        }
-//        else{
-//            temp_string.push_back(i);
-//        }
-//    }
-//    ret_str->push_back(temp_string);
-//    return ret_str;
-//}
 
 vector<string> split_string(string str, string token){
-    cout << "Splitting string: " << str << endl;
-    vector<string>result;
+    vector<string> result;
     while(str.size()){
         int index = str.find(token);
         if(index!=string::npos){
@@ -96,7 +16,6 @@ vector<string> split_string(string str, string token){
     }
     return result;
 }
-
 
 int get_random_integer(const Range& range) {
     if(range.min == range.max){
